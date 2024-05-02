@@ -1,0 +1,82 @@
+import type { CollectionEntry } from 'astro:content';
+import { format } from 'date-fns';
+import { ja } from 'date-fns/locale';
+import readingTime from 'reading-time';
+
+interface BlogCardProps {
+  post: CollectionEntry<'blog'>;
+  className?: string;
+}
+
+export default function BlogCard({ post, className = '' }: BlogCardProps) {
+  const { title, description, pubDate, heroImage, tags, category } = post.data;
+
+  const formattedDate = format(pubDate, 'yyyy.MM.dd', { locale: ja });
+  const readTime = readingTime(post.body);
+
+  return (
+    <article
+      className={`group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 ${className}`}
+    >
+      <a href={`/blog/${post.slug}/`} className="block">
+        {heroImage && (
+          <div className="aspect-video overflow-hidden">
+            <img
+              src={heroImage}
+              alt={title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </div>
+        )}
+
+        <div className="p-6">
+          <div className="flex items-center gap-4 mb-3 text-sm text-gray-500 dark:text-gray-400">
+            <time dateTime={pubDate.toISOString()}>{formattedDate}</time>
+            <span className="flex items-center gap-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {readTime.minutes}分
+            </span>
+            {category && (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                {category}
+              </span>
+            )}
+          </div>
+
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+            {title}
+          </h2>
+
+          <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+            {description}
+          </p>
+
+          {tags && tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {tags.slice(0, 3).map(tag => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                >
+                  #{tag}
+                </span>
+              ))}
+              {tags.length > 3 && (
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                  +{tags.length - 3}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      </a>
+    </article>
+  );
+}

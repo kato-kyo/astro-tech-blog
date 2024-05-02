@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../components/react/Header.tsx';
+import Footer from '../components/react/Footer.tsx';
+
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout
@@ -9,7 +11,7 @@ import Footer from '../components/Footer.astro';
   description="Tech Blogの管理人のプロフィールページです。経歴、スキル、実績などを紹介しています。"
 >
   <div class="min-h-screen flex flex-col">
-    <Header />
+    <Header currentPath={currentPath} client:load />
 
     <main class="flex-1">
       <!-- Hero Section -->
