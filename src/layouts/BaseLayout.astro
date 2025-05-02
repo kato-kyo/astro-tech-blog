@@ -73,9 +73,18 @@ const socialImageURL = new URL(image ?? '/og-image.jpg', Astro.url).href;
 
       if (typeof localStorage !== 'undefined') {
         const observer = new MutationObserver(mutations => {
-          const darkThemeSelected =
-            document.documentElement.classList.contains('dark');
-          localStorage.setItem('theme', darkThemeSelected ? 'dark' : 'light');
+          // class属性の変更のみを処理
+          const classChanges = mutations.filter(
+            mutation =>
+              mutation.type === 'attributes' &&
+              mutation.attributeName === 'class'
+          );
+
+          if (classChanges.length > 0) {
+            const darkThemeSelected =
+              document.documentElement.classList.contains('dark');
+            localStorage.setItem('theme', darkThemeSelected ? 'dark' : 'light');
+          }
         });
         observer.observe(document.documentElement, {
           attributes: true,

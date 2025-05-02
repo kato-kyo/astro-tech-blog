@@ -45,7 +45,7 @@ import ThemeToggle from './ThemeToggle.astro';
           class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
           aria-controls="mobile-menu"
           aria-expanded="false"
-          onclick="toggleMobileMenu()"
+          id="mobile-menu-button"
         >
           <span class="sr-only">メニューを開く</span>
           <svg
@@ -79,17 +79,23 @@ import ThemeToggle from './ThemeToggle.astro';
 <script>
   function toggleMobileMenu() {
     const menu = document.getElementById('mobile-menu');
-    const button = document.querySelector('[aria-controls="mobile-menu"]');
+    const button = document.getElementById('mobile-menu-button');
     const isExpanded = button?.getAttribute('aria-expanded') === 'true';
 
     menu?.classList.toggle('hidden');
     button?.setAttribute('aria-expanded', (!isExpanded).toString());
   }
 
+  // Initialize mobile menu functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.getElementById('mobile-menu-button');
+    menuButton?.addEventListener('click', toggleMobileMenu);
+  });
+
   // Close mobile menu when clicking outside
   document.addEventListener('click', event => {
     const menu = document.getElementById('mobile-menu');
-    const button = document.querySelector('[aria-controls="mobile-menu"]');
+    const button = document.getElementById('mobile-menu-button');
 
     if (
       !menu?.contains(event.target as Node) &&
