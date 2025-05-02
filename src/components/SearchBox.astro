@@ -1,5 +1,5 @@
 ---
-import Search from "astro-pagefind/components/Search";
+import Search from 'astro-pagefind/components/Search';
 
 export interface Props {
   id?: string;
@@ -7,34 +7,34 @@ export interface Props {
   placeholder?: string;
 }
 
-const { 
-  id = "search", 
-  className = "pagefind-search",
-  placeholder = "記事を検索..."
+const {
+  id = 'search',
+  className = 'pagefind-search',
+  placeholder = '記事を検索...',
 } = Astro.props;
 ---
 
 <div class="relative max-w-md mx-auto">
-  <Search 
+  <Search
     id={id}
     className={className}
-    uiOptions={{ 
+    uiOptions={{
       showImages: false,
       showSubResults: true,
       excerptLength: 15,
       translations: {
         placeholder: placeholder,
-        clear_search: "検索をクリア",
-        load_more: "さらに表示",
-        search_label: "このサイトを検索",
-        filters_label: "フィルター",
-        zero_results: "検索結果が見つかりませんでした: [SEARCH_TERM]",
-        many_results: "[COUNT]件の結果が見つかりました: [SEARCH_TERM]",
-        one_result: "1件の結果が見つかりました: [SEARCH_TERM]",
-        alt_search: "[SEARCH_TERM]の検索",
-        search_suggestion: "次を検索してください: [SEARCH_TERM]",
-        searching: "検索中: [SEARCH_TERM]..."
-      }
+        clear_search: '検索をクリア',
+        load_more: 'さらに表示',
+        search_label: 'このサイトを検索',
+        filters_label: 'フィルター',
+        zero_results: '検索結果が見つかりませんでした: [SEARCH_TERM]',
+        many_results: '[COUNT]件の結果が見つかりました: [SEARCH_TERM]',
+        one_result: '1件の結果が見つかりました: [SEARCH_TERM]',
+        alt_search: '[SEARCH_TERM]の検索',
+        search_suggestion: '次を検索してください: [SEARCH_TERM]',
+        searching: '検索中: [SEARCH_TERM]...',
+      },
     }}
   />
 </div>

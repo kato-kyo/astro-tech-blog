@@ -7,16 +7,12 @@ import pagefind from 'astro-pagefind';
 export default defineConfig({
   site: 'https://yourdomain.com', // 実際のドメインに変更
   build: {
-    format: "file",
+    format: 'file',
   },
-  integrations: [
-    tailwind(),
-    sitemap(),
-    pagefind()
-  ],
+  integrations: [tailwind(), sitemap(), pagefind()],
   markdown: {
     shikiConfig: {
-      theme: 'github-dark'
-    }
-  }
+      theme: 'github-dark',
+    },
+  },
 });

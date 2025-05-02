@@ -35,11 +35,7 @@ Astroは「Islands Architecture」を採用しており、必要な部分だけJ
 ```javascript
 // astro.config.mjs
 export default defineConfig({
-  integrations: [
-    tailwind(),
-    sitemap(),
-    pagefind()
-  ]
+  integrations: [tailwind(), sitemap(), pagefind()],
 });
 ```
 
@@ -92,7 +88,7 @@ import BlogLayout from '../../layouts/BlogLayout.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
+  return posts.map(post => ({
     params: { slug: post.slug },
     props: post,
   }));
@@ -137,9 +133,9 @@ export async function getStaticPaths() {
 
   return uniqueTags.map(tag => ({
     params: { tag },
-    props: { 
-      posts: allPosts.filter(post => post.data.tags.includes(tag))
-    }
+    props: {
+      posts: allPosts.filter(post => post.data.tags.includes(tag)),
+    },
   }));
 }
 ---
@@ -154,13 +150,7 @@ export async function getStaticPaths() {
 import { Image } from 'astro:assets';
 ---
 
-<Image 
-  src={heroImage} 
-  alt={title}
-  width={1200}
-  height={630}
-  loading="eager"
-/>
+<Image src={heroImage} alt={title} width={1200} height={630} loading="eager" />
 ```
 
 ### 2. CSS最適化
@@ -172,7 +162,7 @@ Tailwind CSSのPurge機能を活用：
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   // 未使用のCSSを自動削除
-}
+};
 ```
 
 ### 3. バンドルサイズの最適化
@@ -197,7 +187,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
-  
+
   <!-- OGP -->
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
@@ -214,12 +204,12 @@ import { getCollection } from 'astro:content';
 
 export async function GET(context) {
   const posts = await getCollection('blog');
-  
+
   return rss({
     title: 'Tech Blog',
     description: 'Technical articles and learning notes',
     site: context.site,
-    items: posts.map((post) => ({
+    items: posts.map(post => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,

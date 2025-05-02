@@ -49,7 +49,7 @@ interface ApiResponse<T> {
 // 使用例
 const response: ApiResponse<User[]> = {
   status: 'success',
-  data: users
+  data: users,
 };
 ```
 
@@ -110,7 +110,7 @@ class ApiClient {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
     return response.json() as U;
   }
@@ -119,7 +119,10 @@ class ApiClient {
 // 使用例
 const client = new ApiClient();
 const users = await client.get<User[]>('/api/users');
-const newUser = await client.post<CreateUserRequest, User>('/api/users', userData);
+const newUser = await client.post<CreateUserRequest, User>(
+  '/api/users',
+  userData
+);
 ```
 
 ### 制約付きジェネリクス
@@ -135,7 +138,10 @@ interface Identifiable {
   id: string;
 }
 
-function updateEntity<T extends Identifiable>(entity: T, updates: Partial<T>): T {
+function updateEntity<T extends Identifiable>(
+  entity: T,
+  updates: Partial<T>
+): T {
   return { ...entity, ...updates };
 }
 ```
@@ -145,7 +151,7 @@ function updateEntity<T extends Identifiable>(entity: T, updates: Partial<T>): T
 ### Result型パターン
 
 ```typescript
-type Result<T, E = Error> = 
+type Result<T, E = Error> =
   | { success: true; data: T }
   | { success: false; error: E };
 
@@ -182,8 +188,11 @@ abstract class AppError extends Error {
 class ValidationError extends AppError {
   readonly code = 'VALIDATION_ERROR';
   readonly statusCode = 400;
-  
-  constructor(public field: string, message: string) {
+
+  constructor(
+    public field: string,
+    message: string
+  ) {
     super(message);
   }
 }
@@ -291,7 +300,11 @@ type DeepPartial<T> = {
 type NonEmptyArray<T> = [T, ...T[]];
 
 // 関数の戻り値型を取得
-type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+type ReturnType<T extends (...args: any) => any> = T extends (
+  ...args: any
+) => infer R
+  ? R
+  : any;
 ```
 
 ## 7. 設定とツール
@@ -338,11 +351,11 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
 
 ```typescript
 // ❌ 重い型計算
-type HeavyType<T> = T extends string 
+type HeavyType<T> = T extends string
   ? ComplexStringType<T>
-  : T extends number 
-  ? ComplexNumberType<T>
-  : never;
+  : T extends number
+    ? ComplexNumberType<T>
+    : never;
 
 // ✅ 軽量化
 type LightType<T> = T extends string | number ? SimpleType<T> : never;

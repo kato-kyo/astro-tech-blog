@@ -11,29 +11,31 @@ const { headings } = Astro.props;
 const tocHeadings = headings.filter(h => h.depth <= 3);
 ---
 
-{tocHeadings.length > 0 && (
-  <nav class="toc">
-    <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 uppercase tracking-wider">
-      目次
-    </h3>
-    <ul class="space-y-2 text-sm">
-      {tocHeadings.map((heading) => (
-        <li>
-          <a
-            href={`#${heading.slug}`}
-            class={`
+{
+  tocHeadings.length > 0 && (
+    <nav class="toc">
+      <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4 uppercase tracking-wider">
+        目次
+      </h3>
+      <ul class="space-y-2 text-sm">
+        {tocHeadings.map(heading => (
+          <li>
+            <a
+              href={`#${heading.slug}`}
+              class={`
               block text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors
               ${heading.depth === 2 ? 'font-medium' : ''}
               ${heading.depth === 3 ? 'ml-4 text-xs' : ''}
             `}
-          >
-            {heading.text}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </nav>
-)}
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
 
 <style>
   .toc {
