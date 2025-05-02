@@ -1,0 +1,28 @@
+---
+description: Apply this rule to git branch operation
+globs: 
+alwaysApply: false
+---
+以下は、このアプリケーション開発における、ブランチ管理のルールです。
+
+## ブランチ構造
+```
+main
+└── develop
+    └── feature/{機能ID}-base
+        └── feature/{機能ID}-{タスクID}-{short-summary}
+```
+
+## ブランチ作成ルール
+
+### 機能ベースブランチの作成
+機能の最初のタスクを始める際に作成
+- develop ブランチから分岐
+- 命名規則: feature/{機能ID}-base
+- 例: feature/f001-base (fは小文字)
+
+### タスクブランチの作成
+各小タスクを開始する際に作成
+- 対応する feature/{機能ID}-base ブランチから分岐
+- 命名規則: feature/{機能ID}-{タスクID}-{short-summary}
+- 例: feature/f001-t04-login-ui (fとtは小文字)
