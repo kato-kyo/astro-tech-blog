@@ -1,8 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import TableOfContents from '../components/TableOfContents.astro';
+import Header from '../components/react/Header.tsx';
+import Footer from '../components/react/Footer.tsx';
+import TableOfContents from '../components/react/TableOfContents.tsx';
 import type { CollectionEntry } from 'astro:content';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
@@ -25,11 +25,13 @@ const formattedDate = format(pubDate, 'yyyy年MM月dd日', { locale: ja });
 const formattedUpdatedDate = updatedDate
   ? format(updatedDate, 'yyyy年MM月dd日', { locale: ja })
   : null;
+
+const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout title={title} description={description} image={heroImage}>
   <div class="min-h-screen flex flex-col">
-    <Header />
+    <Header currentPath={currentPath} client:load />
 
     <main class="flex-1">
       <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -137,7 +139,7 @@ const formattedUpdatedDate = updatedDate
             headings && headings.length > 0 && (
               <aside class="hidden lg:block lg:col-span-1">
                 <div class="sticky top-8">
-                  <TableOfContents headings={headings} />
+                  <TableOfContents headings={headings} client:load />
                 </div>
               </aside>
             )

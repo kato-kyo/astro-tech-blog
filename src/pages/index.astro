@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import BlogCard from '../components/BlogCard.astro';
+import Header from '../components/react/Header.tsx';
+import Footer from '../components/react/Footer.tsx';
+import BlogCard from '../components/react/BlogCard.tsx';
 import SearchBox from '../components/SearchBox.astro';
 import { getCollection } from 'astro:content';
+
+const currentPath = Astro.url.pathname;
 
 // 最新記事を取得（下書きを除く）
 const allPosts = await getCollection('blog', ({ data }) => {
@@ -37,7 +39,7 @@ const popularTags = Object.entries(tagCounts)
   description="技術に関する記事や学習記録、開発の知見を共有するブログです。プログラミング、Web開発、インフラなどの情報を発信しています。"
 >
   <div class="min-h-screen flex flex-col">
-    <Header />
+    <Header currentPath={currentPath} client:load />
 
     <main class="flex-1">
       <!-- Hero Section -->
@@ -113,7 +115,7 @@ const popularTags = Object.entries(tagCounts)
             recentPosts.length > 0 ? (
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 {recentPosts.map(post => (
-                  <BlogCard post={post} />
+                  <BlogCard post={post} client:visible />
                 ))}
               </div>
             ) : (

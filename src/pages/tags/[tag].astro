@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import BlogCard from '../../components/BlogCard.astro';
+import Header from '../../components/react/Header.tsx';
+import Footer from '../../components/react/Footer.tsx';
+import BlogCard from '../../components/react/BlogCard.tsx';
 import { getCollection } from 'astro:content';
+
+const currentPath = Astro.url.pathname;
 
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -29,7 +31,7 @@ const { posts, tag } = Astro.props;
   description={`「${tag}」タグが付いた記事の一覧ページです。${posts.length}件の記事があります。`}
 >
   <div class="min-h-screen flex flex-col">
-    <Header />
+    <Header currentPath={currentPath} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
@@ -126,7 +128,7 @@ const { posts, tag } = Astro.props;
             posts.length > 0 ? (
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {posts.map(post => (
-                  <BlogCard post={post} />
+                  <BlogCard post={post} client:visible />
                 ))}
               </div>
             ) : (

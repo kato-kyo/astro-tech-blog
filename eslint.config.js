@@ -20,6 +20,20 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        MutationObserver: 'readonly',
+        HTMLDivElement: 'readonly',
+        HTMLButtonElement: 'readonly',
+        MouseEvent: 'readonly',
+        KeyboardEvent: 'readonly',
+        Node: 'readonly',
+        IntersectionObserver: 'readonly',
       },
     },
     plugins: {

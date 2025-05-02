@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
+import Header from '../../components/react/Header.tsx';
+import Footer from '../../components/react/Footer.tsx';
 import { getCollection } from 'astro:content';
+
+const currentPath = Astro.url.pathname;
 
 // 全記事を取得
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -36,7 +38,7 @@ const sortedTags = Object.entries(tagStats)
   description="ブログで使用されているタグの一覧ページです。興味のあるタグから記事を探すことができます。"
 >
   <div class="min-h-screen flex flex-col">
-    <Header />
+    <Header currentPath={currentPath} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
