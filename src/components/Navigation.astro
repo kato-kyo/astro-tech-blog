@@ -1,0 +1,49 @@
+---
+const { mobile = false } = Astro.props;
+
+const navItems = [
+  { href: '/', label: 'ホーム' },
+  { href: '/blog/', label: 'ブログ' },
+  { href: '/tags/', label: 'タグ' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'お問い合わせ' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+{mobile ? (
+  <nav class="space-y-1">
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        class={`
+          block px-3 py-2 rounded-md text-sm font-medium transition-colors
+          ${currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+            ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
+            : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+          }
+        `}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+) : (
+  <nav class="flex items-center justify-center space-x-8">
+    {navItems.map((item) => (
+      <a
+        href={item.href}
+        class={`
+          px-3 py-2 text-sm font-medium rounded-md transition-colors
+          ${currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+            ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
+            : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+          }
+        `}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+)}

@@ -1,0 +1,210 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout 
+  title="お問い合わせ - Tech Blog"
+  description="Tech Blogへのお問い合わせページです。技術的な質問やご相談など、お気軽にお問い合わせください。"
+>
+  <div class="min-h-screen flex flex-col">
+    <Header />
+    
+    <main class="flex-1">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+          <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            お問い合わせ
+          </h1>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            技術的な質問やご相談など、お気軽にお問い合わせください。
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <!-- Contact Form -->
+          <div class="lg:col-span-2">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 lg:p-8">
+              <form 
+                name="contact" 
+                method="POST" 
+                data-netlify="true" 
+                data-netlify-honeypot="bot-field"
+                class="space-y-6"
+              >
+                <!-- Netlify form fields -->
+                <input type="hidden" name="form-name" value="contact" />
+                <div style="display: none;">
+                  <label>
+                    Don't fill this out if you're human: 
+                    <input name="bot-field" />
+                  </label>
+                </div>
+                
+                <!-- Name -->
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    お名前 <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                    placeholder="山田太郎"
+                  />
+                </div>
+                
+                <!-- Email -->
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    メールアドレス <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+                
+                <!-- Subject -->
+                <div>
+                  <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    件名 <span class="text-red-500">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    id="subject" 
+                    name="subject" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                    placeholder="お問い合わせの件名"
+                  />
+                </div>
+                
+                <!-- Message -->
+                <div>
+                  <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    メッセージ <span class="text-red-500">*</span>
+                  </label>
+                  <textarea 
+                    id="message" 
+                    name="message" 
+                    rows="6" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-vertical"
+                    placeholder="お問い合わせ内容をお書きください..."
+                  ></textarea>
+                </div>
+                
+                <!-- Submit Button -->
+                <div>
+                  <button 
+                    type="submit"
+                    class="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-colors"
+                  >
+                    送信する
+                  </button>
+                </div>
+                
+                <!-- Privacy Note -->
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                  <p>
+                    <span class="text-red-500">*</span> 必須項目<br>
+                    お問い合わせいただいた内容は、回答のためにのみ使用いたします。
+                    詳しくは<a href="/privacy/" class="text-primary-600 dark:text-primary-400 hover:underline">プライバシーポリシー</a>をご確認ください。
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Contact Info -->
+          <div class="space-y-8">
+            <!-- Contact Methods -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6">
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                その他の連絡方法
+              </h2>
+              
+              <div class="space-y-4">
+                <div class="flex items-start space-x-3">
+                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-primary-600 dark:text-primary-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-white">GitHub</h3>
+                    <a 
+                      href="https://github.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
+                    >
+                      @username
+                    </a>
+                  </div>
+                </div>
+                
+                <div class="flex items-start space-x-3">
+                  <div class="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <svg class="w-4 h-4 text-primary-600 dark:text-primary-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-white">Twitter</h3>
+                    <a 
+                      href="https://twitter.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
+                    >
+                      @username
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Response Time -->
+            <div class="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                📧 返信について
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                お問い合わせいただいた内容には、通常2-3営業日以内にご返信いたします。
+                お急ぎの場合は、SNSでのご連絡もご利用ください。
+              </p>
+            </div>
+            
+            <!-- FAQ Link -->
+            <div class="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-6 border border-primary-200 dark:border-primary-800">
+              <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                💡 よくある質問
+              </h2>
+              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3">
+                お問い合わせの前に、よくある質問もご確認ください。
+              </p>
+              <a 
+                href="/blog/"
+                class="text-sm text-primary-600 dark:text-primary-400 font-medium hover:underline"
+              >
+                技術記事一覧で解決策を探す →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <Footer />
+  </div>
+</BaseLayout>

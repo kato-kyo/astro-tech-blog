@@ -1,0 +1,77 @@
+---
+import Navigation from './Navigation.astro';
+import ThemeToggle from './ThemeToggle.astro';
+---
+
+<header class="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="flex items-center gap-3 group">
+          <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <span class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+            Tech Blog
+          </span>
+        </a>
+      </div>
+      
+      <!-- Navigation -->
+      <div class="hidden md:block flex-1 max-w-lg mx-8">
+        <Navigation />
+      </div>
+      
+      <!-- Theme Toggle & Mobile Menu -->
+      <div class="flex items-center gap-4">
+        <ThemeToggle />
+        
+        <!-- Mobile menu button -->
+        <button 
+          type="button" 
+          class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+          aria-controls="mobile-menu" 
+          aria-expanded="false"
+          onclick="toggleMobileMenu()"
+        >
+          <span class="sr-only">メニューを開く</span>
+          <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200 dark:border-gray-700">
+        <Navigation mobile />
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const button = document.querySelector('[aria-controls="mobile-menu"]');
+    const isExpanded = button?.getAttribute('aria-expanded') === 'true';
+    
+    menu?.classList.toggle('hidden');
+    button?.setAttribute('aria-expanded', (!isExpanded).toString());
+  }
+  
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (event) => {
+    const menu = document.getElementById('mobile-menu');
+    const button = document.querySelector('[aria-controls="mobile-menu"]');
+    
+    if (!menu?.contains(event.target as Node) && !button?.contains(event.target as Node)) {
+      menu?.classList.add('hidden');
+      button?.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>

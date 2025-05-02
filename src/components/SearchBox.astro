@@ -1,0 +1,139 @@
+---
+import Search from "astro-pagefind/components/Search";
+
+export interface Props {
+  id?: string;
+  className?: string;
+  placeholder?: string;
+}
+
+const { 
+  id = "search", 
+  className = "pagefind-search",
+  placeholder = "記事を検索..."
+} = Astro.props;
+---
+
+<div class="relative max-w-md mx-auto">
+  <Search 
+    id={id}
+    className={className}
+    uiOptions={{ 
+      showImages: false,
+      showSubResults: true,
+      excerptLength: 15,
+      translations: {
+        placeholder: placeholder,
+        clear_search: "検索をクリア",
+        load_more: "さらに表示",
+        search_label: "このサイトを検索",
+        filters_label: "フィルター",
+        zero_results: "検索結果が見つかりませんでした: [SEARCH_TERM]",
+        many_results: "[COUNT]件の結果が見つかりました: [SEARCH_TERM]",
+        one_result: "1件の結果が見つかりました: [SEARCH_TERM]",
+        alt_search: "[SEARCH_TERM]の検索",
+        search_suggestion: "次を検索してください: [SEARCH_TERM]",
+        searching: "検索中: [SEARCH_TERM]..."
+      }
+    }}
+  />
+</div>
+
+<style>
+  /* Custom styling for pagefind search */
+  :global(.pagefind-ui__search-input) {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background-color: white;
+    color: #111827;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%236b7280' viewBox='0 0 20 20'%3e%3cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z' clip-rule='evenodd'/%3e%3c/svg%3e");
+    background-position: 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    transition: all 0.2s;
+  }
+
+  :global(.pagefind-ui__search-input:focus) {
+    outline: none;
+    ring: 2px;
+    ring-color: theme('colors.primary.500');
+    border-color: transparent;
+  }
+
+  :global(.dark .pagefind-ui__search-input) {
+    border-color: #4b5563;
+    background-color: #1f2937;
+    color: white;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%239ca3af' viewBox='0 0 20 20'%3e%3cpath fill-rule='evenodd' d='M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z' clip-rule='evenodd'/%3e%3c/svg%3e");
+  }
+
+  :global(.pagefind-ui__results-area) {
+    margin-top: 0.5rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    max-height: 24rem;
+    overflow-y: auto;
+    z-index: 50;
+  }
+
+  :global(.dark .pagefind-ui__results-area) {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+
+  :global(.pagefind-ui__result) {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  :global(.dark .pagefind-ui__result) {
+    border-bottom-color: #374151;
+  }
+
+  :global(.pagefind-ui__result:last-child) {
+    border-bottom: none;
+  }
+
+  :global(.pagefind-ui__result:hover) {
+    background-color: #f9fafb;
+  }
+
+  :global(.dark .pagefind-ui__result:hover) {
+    background-color: #374151;
+  }
+
+  :global(.pagefind-ui__result-title) {
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  :global(.dark .pagefind-ui__result-title) {
+    color: white;
+  }
+
+  :global(.pagefind-ui__result-excerpt) {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  :global(.dark .pagefind-ui__result-excerpt) {
+    color: #d1d5db;
+  }
+
+  :global(.pagefind-ui__result-title a) {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  :global(.pagefind-ui__result-title a:hover) {
+    text-decoration: underline;
+  }
+</style>
