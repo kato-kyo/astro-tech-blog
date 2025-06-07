@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
 import TableOfContents from '../components/react/TableOfContents.tsx';
+import MobileTableOfContents from '../components/react/MobileTableOfContents.tsx';
 import type { CollectionEntry } from 'astro:content';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
@@ -34,6 +35,13 @@ const currentPath = Astro.url.pathname;
     <Header currentPath={currentPath} client:load />
 
     <main class="flex-1">
+      {/* フローティング目次ボタン */}
+      {
+        headings && headings.length > 0 && (
+          <MobileTableOfContents headings={headings} client:load />
+        )
+      }
+
       <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Hero Section -->
         <header class="mb-8 lg:mb-12">
