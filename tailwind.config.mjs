@@ -84,17 +84,19 @@ export default {
               content: '""',
             },
             pre: {
-              backgroundColor: '#1f2937',
-              color: '#f9fafb',
+              backgroundColor: '#f8f9fa',
+              color: '#24292e',
               borderRadius: '0.5rem',
               padding: '1rem',
               overflow: 'auto',
+              border: '1px solid #e1e4e8',
             },
             'pre code': {
               backgroundColor: 'transparent',
               color: 'inherit',
               padding: '0',
               borderRadius: '0',
+              fontSize: '0.875rem',
             },
             blockquote: {
               borderLeftColor: '#0ea5e9',
@@ -128,6 +130,18 @@ export default {
             code: {
               color: '#7dd3fc',
               backgroundColor: '#374151',
+            },
+            pre: {
+              backgroundColor: '#0d1117',
+              color: '#f0f6fc',
+              border: '1px solid #30363d',
+            },
+            'pre code': {
+              backgroundColor: 'transparent',
+              color: 'inherit',
+              padding: '0',
+              borderRadius: '0',
+              fontSize: '0.875rem',
             },
             blockquote: {
               borderLeftColor: '#7dd3fc',

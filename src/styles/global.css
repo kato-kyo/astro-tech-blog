@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scroll offset for fixed header */
+html {
+  scroll-padding-top: 5rem; /* 80px - header height + margin */
+}
+
 /* Custom Components */
 @layer components {
   .line-clamp-2 {
