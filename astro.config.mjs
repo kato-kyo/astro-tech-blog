@@ -11,6 +11,27 @@ export default defineConfig({
   build: {
     format: 'file',
   },
+  // 画像最適化設定
+  image: {
+    // リモート画像の認証設定（セキュリティ強化）
+    // https://docs.astro.build/en/guides/images/#authorizing-remote-images
+    domains: [
+      'images.unsplash.com',
+      'source.unsplash.com',
+      'picsum.photos',
+      'via.placeholder.com',
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.githubusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cdninstagram.com',
+      }
+    ],
+  },
   integrations: [
     react({
       include: ['**/react/*'],

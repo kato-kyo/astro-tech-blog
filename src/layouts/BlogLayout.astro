@@ -13,6 +13,7 @@ import {
   generateBreadcrumbStructuredData,
   toJsonLd,
 } from '../utils/structured-data';
+import { Image } from 'astro:assets';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -83,11 +84,16 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
           {
             heroImage && (
               <div class="mb-8 aspect-video rounded-lg overflow-hidden">
-                <img
+                <Image
                   src={heroImage}
                   alt={title}
+                  width={1200}
+                  height={675}
+                  format="webp"
+                  quality={85}
                   class="w-full h-full object-cover"
                   loading="eager"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                 />
               </div>
             )
