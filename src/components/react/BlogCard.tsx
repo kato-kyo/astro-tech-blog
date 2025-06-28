@@ -1,5 +1,5 @@
 import type { CollectionEntry } from 'astro:content';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import readingTime from 'reading-time';
 
@@ -9,11 +9,10 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ post, className = '' }: BlogCardProps) {
-  const { title, description, pubDate, heroImage, tags, category, draft } =
-    post.data;
+  const { slug, data } = post;
+  const { title, description, heroImage, pubDate, tags, category, draft } = data;
 
-  const formattedDate = format(pubDate, 'yyyy.MM.dd', { locale: ja });
-  const readTime = readingTime(post.body);
+  const stats = readingTime(post.body);
 
   // 開発環境でのみドラフトバッジを表示
   const showDraftBadge = import.meta.env.DEV && draft;
@@ -29,21 +28,26 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
           </span>
         </div>
       )}
-      <a href={`/blog/${post.slug}/`} className="block relative">
+      <a href={`/blog/${slug}/`} className="block relative">
         {heroImage && (
           <div className="aspect-video overflow-hidden">
             <img
               src={heroImage}
               alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              width={400}
+              height={225}
               loading="lazy"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           </div>
         )}
 
         <div className="p-6">
           <div className="flex items-center gap-4 mb-3 text-sm text-gray-500 dark:text-gray-400">
-            <time dateTime={pubDate.toISOString()}>{formattedDate}</time>
+            <time dateTime={pubDate.toISOString()}>
+              {format(parseISO(pubDate.toISOString()), 'yyyy年M月d日', { locale: ja })}
+            </time>
             <span className="flex items-center gap-1">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
@@ -52,7 +56,7 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
                   clipRule="evenodd"
                 />
               </svg>
-              {readTime.minutes}分
+              {stats.text}
             </span>
             {category && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
@@ -62,7 +66,9 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
           </div>
 
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
-            {title}
+            <a href={`/blog/${slug}`} className="hover:underline">
+              {title}
+            </a>
           </h2>
 
           <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
