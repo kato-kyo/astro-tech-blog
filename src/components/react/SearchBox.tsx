@@ -101,9 +101,9 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
         excerpt_length: 30
       });
 
-      // 最初の10件の詳細データを取得
-      const resultData = await Promise.all(
-        searchResponse.results.slice(0, 10).map(async (result) => {
+      // 全ての検索結果の詳細データを取得
+      const allResultData = await Promise.all(
+        searchResponse.results.map(async (result) => {
           const data = await result.data();
           return {
             id: result.id,
@@ -115,7 +115,15 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
         })
       );
 
-      setResults(resultData);
+      // ブログ記事のみをフィルタリング（記事一覧やページネーションは除外）
+      const blogArticleResults = allResultData.filter((result) => {
+        const url = result.url;
+        // /blog/記事スラッグ.html または /blog/記事スラッグ/ の形式のみを許可
+        return /^\/blog\/[^/]+(\/$|\.html$)/.test(url);
+      });
+
+      // 最初の10件まで表示
+      setResults(blogArticleResults.slice(0, 10));
     } catch {
       setResults([]);
     } finally {
