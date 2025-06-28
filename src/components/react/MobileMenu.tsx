@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import SearchBox from './SearchBox';
 
 interface NavItem {
   href: string;
@@ -97,6 +98,11 @@ export default function MobileMenu({
             : 'opacity-0 -translate-y-2 pointer-events-none'
         }`}
       >
+        {/* Search Box for Mobile */}
+        <div className="px-4 pt-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+          <SearchBox compact placeholder="記事を検索..." />
+        </div>
+
         <nav className="px-4 pt-2 pb-3 space-y-1">
           {navItems.map(item => (
             <a

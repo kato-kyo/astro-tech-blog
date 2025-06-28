@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from './Navigation';
 import ThemeToggle from './ThemeToggle';
 import MobileMenu from './MobileMenu';
+import SearchBox from './SearchBox';
 
 interface NavItem {
   href: string;
@@ -43,9 +44,14 @@ export default function Header({ currentPath }: HeaderProps) {
             </a>
           </div>
 
-          {/* Navigation */}
-          <div className="hidden md:block flex-1 max-w-lg mx-8">
+          {/* Navigation - Desktop */}
+          <div className="hidden md:block">
             <Navigation currentPath={currentPath} />
+          </div>
+
+          {/* Search Box - Desktop */}
+          <div className="hidden md:block flex-1 max-w-md mx-8">
+            <SearchBox compact placeholder="記事を検索..." />
           </div>
 
           {/* Theme Toggle & Mobile Menu */}
