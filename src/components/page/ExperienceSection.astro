@@ -1,0 +1,165 @@
+---
+interface Experience {
+  type: 'work' | 'education' | 'project' | 'certification';
+  title: string;
+  organization: string;
+  location?: string;
+  startDate: Date;
+  endDate?: Date;
+  current: boolean;
+  description: string;
+  technologies?: string[];
+  achievements?: string[];
+}
+
+interface Props {
+  experiences: Experience[];
+}
+
+const { experiences } = Astro.props;
+
+// 経験をタイプ別にグループ化
+const experiencesByType = experiences.reduce(
+  (acc, exp) => {
+    if (!acc[exp.type]) {
+      acc[exp.type] = [];
+    }
+    acc[exp.type].push(exp);
+    return acc;
+  },
+  {} as Record<string, Experience[]>
+);
+
+// 各タイプを開始日順にソート
+Object.keys(experiencesByType).forEach(type => {
+  experiencesByType[type].sort(
+    (a, b) => b.startDate.getTime() - a.startDate.getTime()
+  );
+});
+
+// タイプの表示名とアイコン
+const typeConfig = {
+  work: { name: '職歴', icon: '💼' },
+  education: { name: '学歴', icon: '🎓' },
+  project: { name: 'プロジェクト', icon: '🚀' },
+  certification: { name: '資格', icon: '📜' },
+};
+
+// 日付フォーマット
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+  });
+};
+
+// 期間の表示
+const formatPeriod = (startDate: Date, endDate?: Date, current?: boolean) => {
+  const start = formatDate(startDate);
+  if (current) {
+    return `${start} - 現在`;
+  }
+  if (endDate) {
+    return `${start} - ${formatDate(endDate)}`;
+  }
+  return start;
+};
+---
+
+<section class="mb-16">
+  <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+    Experience
+  </h2>
+
+  <div class="space-y-12">
+    {
+      Object.entries(experiencesByType).map(([type, typeExperiences]) => (
+        <div>
+          <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+            <span class="mr-2">
+              {typeConfig[type as keyof typeof typeConfig].icon}
+            </span>
+            {typeConfig[type as keyof typeof typeConfig].name}
+          </h3>
+
+          <div class="space-y-8">
+            {typeExperiences.map(exp => (
+              <div class="relative">
+                {/* タイムライン */}
+                <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600">
+                  <div class="absolute top-2 -left-2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800" />
+                </div>
+
+                {/* コンテンツ */}
+                <div class="ml-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                  <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                    <div class="mb-2 md:mb-0">
+                      <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        {exp.title}
+                      </h4>
+                      <p class="text-lg text-blue-600 dark:text-blue-400">
+                        {exp.organization}
+                      </p>
+                      {exp.location && (
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                          📍 {exp.location}
+                        </p>
+                      )}
+                    </div>
+
+                    <div class="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                      {formatPeriod(exp.startDate, exp.endDate, exp.current)}
+                    </div>
+                  </div>
+
+                  {/* 説明 */}
+                  <div class="mb-4">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                      {exp.description}
+                    </p>
+                  </div>
+
+                  {/* 技術スタック */}
+                  {exp.technologies && exp.technologies.length > 0 && (
+                    <div class="mb-4">
+                      <h5 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        使用技術:
+                      </h5>
+                      <div class="flex flex-wrap gap-2">
+                        {exp.technologies.map(tech => (
+                          <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 実績 */}
+                  {exp.achievements && exp.achievements.length > 0 && (
+                    <div>
+                      <h5 class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                        主な実績:
+                      </h5>
+                      <ul class="space-y-1">
+                        {exp.achievements.map(achievement => (
+                          <li class="text-sm text-gray-700 dark:text-gray-300 flex items-start">
+                            <span class="text-green-500 mr-2 mt-1 flex-shrink-0">
+                              ✓
+                            </span>
+                            <span>{achievement}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
