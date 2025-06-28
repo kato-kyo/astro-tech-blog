@@ -30,7 +30,8 @@ export default function Navigation({
   };
 
   const getLinkClasses = (href: string) => {
-    const baseClasses = 'transition-colors';
+    const baseClasses =
+      'transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900';
     const activeClasses =
       'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20';
     const inactiveClasses =
@@ -49,12 +50,16 @@ export default function Navigation({
 
   if (mobile) {
     return (
-      <nav className={`space-y-1 ${className}`}>
+      <nav
+        className={`space-y-1 ${className}`}
+        aria-label="モバイルメインナビゲーション"
+      >
         {navItems.map(item => (
           <a
             key={item.href}
             href={item.href}
             className={getLinkClasses(item.href)}
+            aria-current={isActiveLink(item.href) ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -64,12 +69,16 @@ export default function Navigation({
   }
 
   return (
-    <nav className={`flex items-center justify-center space-x-8 ${className}`}>
+    <nav
+      className={`flex items-center justify-center space-x-8 ${className}`}
+      aria-label="メインナビゲーション"
+    >
       {navItems.map(item => (
         <a
           key={item.href}
           href={item.href}
           className={getLinkClasses(item.href)}
+          aria-current={isActiveLink(item.href) ? 'page' : undefined}
         >
           {item.label}
         </a>

@@ -103,12 +103,16 @@ export default function MobileMenu({
           <SearchBox compact placeholder="記事を検索..." />
         </div>
 
-        <nav className="px-4 pt-2 pb-3 space-y-1">
+        <nav
+          className="px-4 pt-2 pb-3 space-y-1"
+          aria-label="モバイルメインナビゲーション"
+        >
           {navItems.map(item => (
             <a
               key={item.href}
               href={item.href}
               onClick={() => setIsOpen(false)}
+              aria-current={isActiveLink(item.href) ? 'page' : undefined}
               className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                 isActiveLink(item.href)
                   ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'

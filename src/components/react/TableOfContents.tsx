@@ -63,17 +63,24 @@ export default function TableOfContents({
   return (
     <nav
       className={`toc bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700 ${className}`}
+      aria-label="記事の目次"
+      role="navigation"
     >
-      <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 uppercase tracking-wider">
+      <h3
+        className="text-sm font-semibold text-gray-900 dark:text-white mb-4 uppercase tracking-wider"
+        id="toc-heading"
+      >
         目次
       </h3>
-      <ul className="space-y-2 text-sm">
+      <ul className="space-y-2 text-sm" aria-labelledby="toc-heading">
         {tocHeadings.map(heading => (
           <li key={heading.slug}>
             <button
               onClick={() => handleClick(heading.slug)}
+              aria-label={`${heading.text}の章へ移動`}
+              aria-current={activeId === heading.slug ? 'location' : undefined}
               className={`
-                block w-full text-left transition-colors duration-200
+                block w-full text-left transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-primary-400 rounded-sm
                 ${
                   activeId === heading.slug
                     ? 'text-primary-600 dark:text-primary-400 font-medium'
@@ -89,6 +96,7 @@ export default function TableOfContents({
                     ? 'bg-primary-600 dark:bg-primary-400'
                     : 'bg-gray-300 dark:bg-gray-600'
                 }`}
+                aria-hidden="true"
               />
               {heading.text}
             </button>
