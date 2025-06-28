@@ -17,13 +17,15 @@ export async function getStaticPaths() {
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
     return {
-      params: { tag },
+      params: { tag: encodeURIComponent(tag) },
       props: { posts: filteredPosts, tag },
     };
   });
 }
 
 const { posts, tag } = Astro.props;
+// タグ名はpropsから取得（オリジナルの表示名）
+// URLパラメータは自動的にエンコードされている
 ---
 
 <BaseLayout
