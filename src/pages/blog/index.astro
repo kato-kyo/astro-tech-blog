@@ -10,6 +10,12 @@ import { getCollection } from 'astro:content';
 const POSTS_PER_PAGE = 12;
 const currentPath = Astro.url.pathname;
 
+// 記号を削除してカテゴリ名をクリーンアップ
+function sanitizeCategory(category: string): string {
+  // 記号を削除（英数字と日本語以外）
+  return category.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '');
+}
+
 // 記事を取得（下書きを除く）
 const allPosts = await getCollection('blog', ({ data }) => {
   return !data.draft;
@@ -81,7 +87,7 @@ const categories = [
                     ).length;
                     return (
                       <a
-                        href={`/blog/category/${category}/`}
+                        href={`/categories/${sanitizeCategory(category as string)}/`}
                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
                       >
                         {category} ({count})
