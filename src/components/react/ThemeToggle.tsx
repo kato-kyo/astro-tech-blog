@@ -59,7 +59,7 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
     // システム設定変更の監視
     if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleSystemChange = (e: any) => {
+      const handleSystemChange = (e: { matches: boolean }) => {
         const currentTheme = getThemePreference();
         if (currentTheme === 'system') {
           const newEffective = e.matches ? 'dark' : 'light';
