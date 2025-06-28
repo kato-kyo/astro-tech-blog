@@ -3,12 +3,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import CategoryGrid from '../../components/react/CategoryGrid.tsx';
-import { getCollection } from 'astro:content';
+import { getBlogPosts } from '../../utils/content.ts';
 
 const currentPath = Astro.url.pathname;
 
-// 全記事を取得
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+// 全記事を取得（環境に応じてドラフトを表示）
+const allPosts = await getBlogPosts();
 
 // カテゴリの統計を計算
 const categoryStats = allPosts.reduce(

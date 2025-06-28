@@ -9,16 +9,27 @@ interface BlogCardProps {
 }
 
 export default function BlogCard({ post, className = '' }: BlogCardProps) {
-  const { title, description, pubDate, heroImage, tags, category } = post.data;
+  const { title, description, pubDate, heroImage, tags, category, draft } =
+    post.data;
 
   const formattedDate = format(pubDate, 'yyyy.MM.dd', { locale: ja });
   const readTime = readingTime(post.body);
 
+  // 開発環境でのみドラフトバッジを表示
+  const showDraftBadge = import.meta.env.DEV && draft;
+
   return (
     <article
-      className={`group bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 ${className}`}
+      className={`group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 ${className}`}
     >
-      <a href={`/blog/${post.slug}/`} className="block">
+      {showDraftBadge && (
+        <div className="absolute top-3 left-3 z-10">
+          <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 shadow-sm">
+            🚧
+          </span>
+        </div>
+      )}
+      <a href={`/blog/${post.slug}/`} className="block relative">
         {heroImage && (
           <div className="aspect-video overflow-hidden">
             <img

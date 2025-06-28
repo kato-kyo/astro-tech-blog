@@ -4,9 +4,8 @@ import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import BlogCard from '../../components/react/BlogCard.tsx';
 import Pagination from '../../components/react/Pagination.tsx';
-import { createPageTitle, SITE_CONFIG } from '../../config/site.ts';
-
-import { getCollection } from 'astro:content';
+import { createPageTitle } from '../../config/site.ts';
+import { getSortedBlogPosts } from '../../utils/content.ts';
 
 const POSTS_PER_PAGE = 12;
 const currentPath = Astro.url.pathname;
@@ -17,15 +16,8 @@ function sanitizeCategory(category: string): string {
   return category.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '');
 }
 
-// 記事を取得（下書きを除く）
-const allPosts = await getCollection('blog', ({ data }) => {
-  return !data.draft;
-});
-
-// 公開日順にソート
-const sortedPosts = allPosts.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+// 記事を取得（環境に応じてドラフトを表示）
+const sortedPosts = await getSortedBlogPosts();
 
 // 1ページ目の記事のみを取得
 const posts = sortedPosts.slice(0, POSTS_PER_PAGE);
@@ -36,7 +28,7 @@ const currentPage = 1;
 
 // カテゴリ一覧を取得
 const categories = [
-  ...new Set(allPosts.map(post => post.data.category).filter(Boolean)),
+  ...new Set(sortedPosts.map(post => post.data.category).filter(Boolean)),
 ];
 ---
 
@@ -55,6 +47,7 @@ const categories = [
               class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4"
             >
               記事一覧
+            </h1>
           </div>
         </div>
       </section>
@@ -76,7 +69,7 @@ const categories = [
                     すべて ({sortedPosts.length})
                   </a>
                   {categories.map(category => {
-                    const count = allPosts.filter(
+                    const count = sortedPosts.filter(
                       post => post.data.category === category
                     ).length;
                     return (

@@ -5,22 +5,15 @@ import Footer from '../../../components/react/Footer.tsx';
 import BlogCard from '../../../components/react/BlogCard.tsx';
 import Pagination from '../../../components/react/Pagination.tsx';
 
-import { getCollection } from 'astro:content';
+import { getSortedBlogPosts } from '../../../utils/content.ts';
 import type { GetStaticPaths } from 'astro';
 
 // 定数定義
 const POSTS_PER_PAGE = 12;
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // 記事を取得（下書きを除く）
-  const allPosts = await getCollection('blog', ({ data }) => {
-    return !data.draft;
-  });
-
-  // 公開日順にソート
-  const sortedPosts = allPosts.sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-  );
+  // 記事を取得（環境に応じてドラフトを表示）
+  const sortedPosts = await getSortedBlogPosts();
 
   // 総ページ数を計算
   const totalPages = Math.ceil(sortedPosts.length / 12);

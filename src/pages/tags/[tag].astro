@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import BlogCard from '../../components/react/BlogCard.tsx';
-import { getCollection } from 'astro:content';
+import { getBlogPosts } from '../../utils/content.ts';
 
 const currentPath = Astro.url.pathname;
 
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
     return tag.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '');
   }
 
-  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+  const allPosts = await getBlogPosts();
   const uniqueTags = [...new Set(allPosts.flatMap(post => post.data.tags))];
 
   return uniqueTags.map(tag => {

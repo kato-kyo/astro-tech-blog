@@ -14,8 +14,19 @@ export interface Props {
 }
 
 const { post } = Astro.props;
-const { title, description, pubDate, updatedDate, heroImage, tags, category } =
-  post.data;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags,
+  category,
+  draft,
+} = post.data;
+
+// 開発環境でのみドラフトバッジを表示
+const showDraftBadge = import.meta.env.DEV && draft;
 
 // 記事の内容を取得して読了時間を計算
 const { Content, headings } = await post.render();
@@ -164,6 +175,16 @@ const currentPath = Astro.url.pathname;
                 )
               }
             </div>
+
+            {
+              showDraftBadge && (
+                <div class="mb-3">
+                  <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 border border-yellow-300 dark:border-yellow-700">
+                    🚧 ドラフト
+                  </span>
+                </div>
+              )
+            }
 
             <h1
               class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight"
