@@ -10,7 +10,8 @@ interface BlogCardProps {
 
 export default function BlogCard({ post, className = '' }: BlogCardProps) {
   const { slug, data } = post;
-  const { title, description, heroImage, pubDate, tags, category, draft } = data;
+  const { title, description, heroImage, pubDate, tags, category, draft } =
+    data;
 
   const stats = readingTime(post.body);
 
@@ -28,7 +29,10 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
           </span>
         </div>
       )}
-      <a href={`/blog/${slug}/`} className="block relative">
+      <a
+        href={`/blog/${slug}/`}
+        className="block relative focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900 rounded-lg"
+      >
         {heroImage && (
           <div className="aspect-video overflow-hidden">
             <img
@@ -46,7 +50,9 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
         <div className="p-6">
           <div className="flex items-center gap-4 mb-3 text-sm text-gray-500 dark:text-gray-400">
             <time dateTime={pubDate.toISOString()}>
-              {format(parseISO(pubDate.toISOString()), 'yyyy年M月d日', { locale: ja })}
+              {format(parseISO(pubDate.toISOString()), 'yyyy年M月d日', {
+                locale: ja,
+              })}
             </time>
             <span className="flex items-center gap-1">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -66,9 +72,7 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
           </div>
 
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
-            <a href={`/blog/${slug}`} className="hover:underline">
-              {title}
-            </a>
+            <span className="hover:underline">{title}</span>
           </h2>
 
           <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">

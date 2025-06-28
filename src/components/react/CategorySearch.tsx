@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 
 interface CategoryData {
   category: string;
@@ -21,6 +21,7 @@ export default function CategorySearch({
   className = '',
 }: CategorySearchProps) {
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // 検索クエリに基づいてカテゴリをフィルタリング
   const filteredCategories = useMemo(() => {
@@ -54,6 +55,14 @@ export default function CategorySearch({
     setQuery('');
   };
 
+  // キーボードイベントハンドラ
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') {
+      setQuery('');
+      inputRef.current?.blur();
+    }
+  };
+
   return (
     <div className={`mb-8 ${className}`}>
       <div className="relative max-w-md mx-auto">
@@ -76,9 +85,11 @@ export default function CategorySearch({
 
         {/* 検索入力フィールド */}
         <input
+          ref={inputRef}
           type="text"
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
         />
@@ -88,7 +99,8 @@ export default function CategorySearch({
           <button
             type="button"
             onClick={handleClearSearch}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded-md"
+            aria-label="検索をクリア"
           >
             <svg
               className="h-5 w-5"

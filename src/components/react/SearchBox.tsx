@@ -32,8 +32,8 @@ interface PagefindResult {
 
 interface PagefindAPI {
   search: (
-    keyword: string,
-    options?: { limit?: number; excerpt_length?: number }
+    _searchQuery: string,
+    _options?: { limit?: number; excerpt_length?: number }
   ) => Promise<{
     results: PagefindResult[];
   }>;
@@ -57,6 +57,7 @@ export default function SearchBox({
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [pagefind, setPagefind] = useState<PagefindAPI | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -156,10 +157,52 @@ export default function SearchBox({
     [performSearch]
   );
 
-  // 入力変更ハンドラ
+  // Enterキーでの検索とキーボードナビゲーション
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedIndex >= 0 && selectedIndex < results.length) {
+        // 選択された結果に移動
+        const selectedResult = results[selectedIndex];
+        window.location.href = selectedResult.url;
+        setIsOpen(false);
+      } else {
+        // 通常の検索実行
+        if (debounceRef.current) {
+          window.clearTimeout(debounceRef.current);
+        }
+        performSearch(query);
+      }
+    } else if (e.key === 'Escape') {
+      setIsOpen(false);
+      setSelectedIndex(-1);
+      setQuery('');
+      inputRef.current?.blur();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (results.length > 0) {
+        setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : 0));
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (results.length > 0) {
+        setSelectedIndex(prev => (prev > 0 ? prev - 1 : results.length - 1));
+      }
+    }
+  };
+
+  // 結果アイテムのクリック
+  const handleResultClick = (url: string) => {
+    window.location.href = url;
+    setIsOpen(false);
+    setSelectedIndex(-1);
+  };
+
+  // 検索結果リセット時にselectedIndexもリセット
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
+    setSelectedIndex(-1);
 
     if (value.trim()) {
       setIsOpen(true);
@@ -168,25 +211,6 @@ export default function SearchBox({
       setIsOpen(false);
       setResults([]);
     }
-  };
-
-  // Enterキーでの検索
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      if (debounceRef.current) {
-        window.clearTimeout(debounceRef.current);
-      }
-      performSearch(query);
-    } else if (e.key === 'Escape') {
-      setIsOpen(false);
-      inputRef.current?.blur();
-    }
-  };
-
-  // 結果アイテムのクリック
-  const handleResultClick = (url: string) => {
-    window.location.href = url;
-    setIsOpen(false);
   };
 
   // 外部クリックで閉じる
@@ -217,6 +241,22 @@ export default function SearchBox({
       }
     };
   }, []);
+
+  // selectedIndexが変更されたときに選択された項目にスクロール
+  useEffect(() => {
+    if (selectedIndex >= 0 && isOpen) {
+      const selectedElement = dropdownRef.current?.querySelector(
+        `[data-result-index="${selectedIndex}"]`
+      );
+
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }
+    }
+  }, [selectedIndex, isOpen]);
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
@@ -270,25 +310,49 @@ export default function SearchBox({
               検索中...
             </div>
           ) : results.length > 0 ? (
-            <ul>
-              {results.map(result => (
+            <ul role="listbox" aria-label="検索結果">
+              {results.map((result, index) => (
                 <li
                   key={result.id}
-                  className="p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+                  data-result-index={index}
+                  role="option"
+                  aria-selected={index === selectedIndex}
+                  className={`p-3 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors focus:outline-none ${
+                    index === selectedIndex
+                      ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-900 dark:text-primary-100'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-700'
+                  }`}
                   onClick={() => handleResultClick(result.url)}
+                  onMouseEnter={() => setSelectedIndex(index)}
                 >
-                  <div className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+                  <div
+                    className={`font-medium mb-1 ${
+                      index === selectedIndex
+                        ? 'text-primary-900 dark:text-primary-100'
+                        : 'text-gray-900 dark:text-gray-100'
+                    }`}
+                  >
                     {result.meta.title || 'タイトルなし'}
                   </div>
                   {result.sub_results.length > 0 && (
                     <div
-                      className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2"
+                      className={`text-sm line-clamp-2 ${
+                        index === selectedIndex
+                          ? 'text-primary-700 dark:text-primary-300'
+                          : 'text-gray-600 dark:text-gray-400'
+                      }`}
                       dangerouslySetInnerHTML={{
                         __html: result.sub_results[0].excerpt,
                       }}
                     />
                   )}
-                  <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                  <div
+                    className={`text-xs mt-1 ${
+                      index === selectedIndex
+                        ? 'text-primary-600 dark:text-primary-400'
+                        : 'text-blue-600 dark:text-blue-400'
+                    }`}
+                  >
                     {result.url}
                   </div>
                 </li>

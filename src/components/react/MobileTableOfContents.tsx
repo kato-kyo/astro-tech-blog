@@ -21,7 +21,7 @@ export default function MobileTableOfContents({ headings }: Props) {
       {/* フローティングボタン */}
       <button
         onClick={toggleToc}
-        className="fixed top-20 right-4 z-40 bg-gray-600/90 hover:bg-gray-700 text-white px-3 py-2 rounded-md shadow-md transition-all duration-200 backdrop-blur-sm text-sm font-medium"
+        className="fixed top-20 right-4 z-40 bg-gray-600/90 hover:bg-gray-700 text-white px-3 py-2 rounded-md shadow-md transition-all duration-200 backdrop-blur-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400"
         aria-label="目次を開く"
       >
         目次
@@ -49,7 +49,7 @@ export default function MobileTableOfContents({ headings }: Props) {
             </h3>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-primary-400"
               aria-label="目次を閉じる"
             >
               <svg
@@ -77,7 +77,7 @@ export default function MobileTableOfContents({ headings }: Props) {
                     <a
                       href={`#${heading.slug}`}
                       onClick={handleLinkClick}
-                      className={`block text-sm hover:text-primary-600 dark:hover:text-primary-400 transition-colors ${
+                      className={`block text-sm hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-primary-400 rounded-sm ${
                         heading.depth === 1
                           ? 'font-semibold text-gray-900 dark:text-white'
                           : heading.depth === 2

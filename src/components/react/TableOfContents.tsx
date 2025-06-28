@@ -73,7 +73,7 @@ export default function TableOfContents({
             <button
               onClick={() => handleClick(heading.slug)}
               className={`
-                block w-full text-left transition-colors duration-200
+                block w-full text-left transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-primary-400 rounded-sm
                 ${
                   activeId === heading.slug
                     ? 'text-primary-600 dark:text-primary-400 font-medium'

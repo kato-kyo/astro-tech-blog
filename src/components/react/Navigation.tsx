@@ -30,7 +30,8 @@ export default function Navigation({
   };
 
   const getLinkClasses = (href: string) => {
-    const baseClasses = 'transition-colors';
+    const baseClasses =
+      'transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900';
     const activeClasses =
       'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20';
     const inactiveClasses =
