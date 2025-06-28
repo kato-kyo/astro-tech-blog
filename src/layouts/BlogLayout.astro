@@ -8,6 +8,11 @@ import type { CollectionEntry } from 'astro:content';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import readingTime from 'reading-time';
+import {
+  generateArticleStructuredData,
+  generateBreadcrumbStructuredData,
+  toJsonLd,
+} from '../utils/structured-data';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -39,9 +44,28 @@ const formattedUpdatedDate = updatedDate
   : null;
 
 const currentPath = Astro.url.pathname;
+
+// 構造化データ生成
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const articleStructuredData = generateArticleStructuredData(post, canonicalURL);
+
+// パンくずナビ用の構造化データ
+const breadcrumbData = generateBreadcrumbStructuredData([
+  { name: 'ホーム', url: Astro.site!.href },
+  { name: 'ブログ', url: new URL('/blog/', Astro.site).href },
+  { name: title, url: canonicalURL },
+]);
+
+const structuredDataJson = toJsonLd(articleStructuredData);
+const breadcrumbJson = toJsonLd(breadcrumbData);
 ---
 
-<BaseLayout title={title} description={description} image={heroImage}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={heroImage}
+  structuredData={[structuredDataJson, breadcrumbJson]}
+>
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
 

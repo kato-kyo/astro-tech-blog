@@ -1,12 +1,17 @@
 ---
 import '../styles/global.css';
 import { SITE_CONFIG } from '../config/site.ts';
+import {
+  generateWebSiteStructuredData,
+  toJsonLd,
+} from '../utils/structured-data';
 
 export interface Props {
   title?: string;
   description?: string;
   image?: string;
   noindex?: boolean;
+  structuredData?: string[];
 }
 
 const {
@@ -14,6 +19,7 @@ const {
   description = SITE_CONFIG.seo.description,
   image,
   noindex = false,
+  structuredData = [],
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -21,6 +27,13 @@ const socialImageURL = new URL(
   image ?? SITE_CONFIG.seo.defaultOgImage,
   Astro.url
 ).href;
+
+// WebSite構造化データ生成（ページ固有の構造化データがない場合）
+const websiteStructuredData = generateWebSiteStructuredData(Astro.site!.href);
+const defaultStructuredData =
+  structuredData.length > 0
+    ? structuredData
+    : [toJsonLd(websiteStructuredData)];
 ---
 
 <!doctype html>
@@ -64,6 +77,13 @@ const socialImageURL = new URL(
       title={SITE_CONFIG.rss.title}
       href="/rss.xml"
     />
+
+    <!-- Structured Data (JSON-LD) -->
+    {
+      defaultStructuredData.map(data => (
+        <script type="application/ld+json" set:html={data} />
+      ))
+    }
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
