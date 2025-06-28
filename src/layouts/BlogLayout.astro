@@ -4,6 +4,7 @@ import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
 import TableOfContents from '../components/react/TableOfContents.tsx';
 import MobileTableOfContents from '../components/react/MobileTableOfContents.tsx';
+import SocialShare from '../components/react/SocialShare.tsx';
 import type { CollectionEntry } from 'astro:content';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
@@ -240,6 +241,16 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
                 </div>
               )
             }
+
+            <!-- Social Share - Top -->
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <SocialShare
+                url={canonicalURL}
+                title={title}
+                description={description}
+                client:load
+              />
+            </div>
           </div>
         </header>
 
@@ -268,6 +279,16 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
         <footer
           class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
         >
+          <!-- Social Share - Bottom -->
+          <div class="mb-8">
+            <SocialShare
+              url={canonicalURL}
+              title={title}
+              description={description}
+              client:load
+            />
+          </div>
+
           <div
             class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
           >
