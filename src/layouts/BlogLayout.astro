@@ -128,7 +128,7 @@ const currentPath = Astro.url.pathname;
                 <div class="flex flex-wrap gap-2">
                   {tags.map(tag => (
                     <a
-                      href={`/tags/${tag}/`}
+                      href={`/tags/${encodeURIComponent(tag)}/`}
                       class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
                     >
                       #{tag}
@@ -173,7 +173,7 @@ const currentPath = Astro.url.pathname;
                 tags &&
                   tags.map(tag => (
                     <a
-                      href={`/tags/${tag}/`}
+                      href={`/tags/${encodeURIComponent(tag)}/`}
                       class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
                     >
                       #{tag}

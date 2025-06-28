@@ -65,7 +65,7 @@ const sortedTags = Object.entries(tagStats)
               <div class="grid gap-4">
                 {sortedTags.map(({ tag, count }) => (
                   <a
-                    href={`/tags/${tag}/`}
+                    href={`/tags/${encodeURIComponent(tag)}/`}
                     class="group block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-lg transition-all duration-300"
                   >
                     <div class="flex items-center justify-between">
