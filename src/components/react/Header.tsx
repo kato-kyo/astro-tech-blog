@@ -3,6 +3,7 @@ import Navigation from './Navigation';
 import ThemeToggle from './ThemeToggle';
 import MobileMenu from './MobileMenu';
 import SearchBox from './SearchBox';
+import { SITE_CONFIG } from '../../config/site';
 
 interface NavItem {
   href: string;
@@ -39,7 +40,7 @@ export default function Header({ currentPath }: HeaderProps) {
                 </svg>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                Tech Blog
+                {SITE_CONFIG.nav.headerTitle}
               </span>
             </a>
           </div>

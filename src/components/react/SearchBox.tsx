@@ -31,8 +31,10 @@ interface PagefindResult {
 }
 
 interface PagefindAPI {
-  // eslint-disable-next-line no-unused-vars
-  search: (keyword: string, options?: { limit?: number; excerpt_length?: number }) => Promise<{
+  search: (
+    keyword: string,
+    options?: { limit?: number; excerpt_length?: number }
+  ) => Promise<{
     results: PagefindResult[];
   }>;
   init: () => Promise<void>;
@@ -44,7 +46,11 @@ interface SearchBoxProps {
   compact?: boolean;
 }
 
-export default function SearchBox({ placeholder = "記事を検索...", className = "", compact = false }: SearchBoxProps) {
+export default function SearchBox({
+  placeholder = '記事を検索...',
+  className = '',
+  compact = false,
+}: SearchBoxProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -69,10 +75,10 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
           // @ts-ignore: Pagefindは動的に生成されるため型定義が利用できない
           return await import(/* @vite-ignore */ url);
         })();
-        
+
         // Pagefindを初期化
         await pagefindModule.init();
-        
+
         setPagefind(pagefindModule);
         setIsInitialized(true);
       } catch {
@@ -82,67 +88,73 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
 
     // 少し遅延させてから初期化（DOMが完全に読み込まれてから）
     const timer = setTimeout(initializePagefind, 100);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
   // 検索実行
-  const performSearch = useCallback(async (searchQuery: string) => {
-    if (!searchQuery.trim() || !pagefind || !isInitialized) {
-      setResults([]);
-      return;
-    }
+  const performSearch = useCallback(
+    async (searchQuery: string) => {
+      if (!searchQuery.trim() || !pagefind || !isInitialized) {
+        setResults([]);
+        return;
+      }
 
-    try {
-      setIsLoading(true);
+      try {
+        setIsLoading(true);
 
-      const searchResponse = await pagefind.search(searchQuery, {
-        limit: 10,
-        excerpt_length: 30
-      });
+        const searchResponse = await pagefind.search(searchQuery, {
+          limit: 10,
+          excerpt_length: 30,
+        });
 
-      // 全ての検索結果の詳細データを取得
-      const allResultData = await Promise.all(
-        searchResponse.results.map(async (result) => {
-          const data = await result.data();
-          return {
-            id: result.id,
-            url: data.url,
-            content: data.content,
-            sub_results: data.sub_results,
-            meta: data.meta
-          };
-        })
-      );
+        // 全ての検索結果の詳細データを取得
+        const allResultData = await Promise.all(
+          searchResponse.results.map(async result => {
+            const data = await result.data();
+            return {
+              id: result.id,
+              url: data.url,
+              content: data.content,
+              sub_results: data.sub_results,
+              meta: data.meta,
+            };
+          })
+        );
 
-      // ブログ記事のみをフィルタリング（記事一覧やページネーションは除外）
-      const blogArticleResults = allResultData.filter((result) => {
-        const url = result.url;
-        // /blog/記事スラッグ.html または /blog/記事スラッグ/ の形式のみを許可
-        return /^\/blog\/[^/]+(\/$|\.html$)/.test(url);
-      });
+        // ブログ記事のみをフィルタリング（記事一覧やページネーションは除外）
+        const blogArticleResults = allResultData.filter(result => {
+          const url = result.url;
+          // /blog/記事スラッグ.html または /blog/記事スラッグ/ の形式のみを許可
+          return /^\/blog\/[^/]+(\/$|\.html$)/.test(url);
+        });
 
-      // 最初の10件まで表示
-      setResults(blogArticleResults.slice(0, 10));
-    } catch {
-      setResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [pagefind, isInitialized]);
+        // 最初の10件まで表示
+        setResults(blogArticleResults.slice(0, 10));
+      } catch {
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [pagefind, isInitialized]
+  );
 
   // デバウンス付き検索
-  const debouncedSearch = useCallback((searchQuery: string) => {
-    // 既存のタイマーをクリア
-    if (debounceRef.current) {
-      window.clearTimeout(debounceRef.current);
-    }
+  const debouncedSearch = useCallback(
+    (searchQuery: string) => {
+      // 既存のタイマーをクリア
+      if (debounceRef.current) {
+        window.clearTimeout(debounceRef.current);
+      }
 
-    // 新しいタイマーを設定
-    debounceRef.current = window.setTimeout(() => {
-      performSearch(searchQuery);
-    }, 300);
-  }, [performSearch]);
+      // 新しいタイマーを設定
+      debounceRef.current = window.setTimeout(() => {
+        performSearch(searchQuery);
+      }, 300);
+    },
+    [performSearch]
+  );
 
   // 入力変更ハンドラ
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,7 +192,10 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
   // 外部クリックで閉じる
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -224,14 +239,24 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
             ${compact ? 'text-sm py-1.5' : ''}
           `}
         />
-        
+
         {/* 検索アイコン */}
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           {isLoading ? (
             <div className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
           ) : (
-            <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              className="h-4 w-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           )}
         </div>
@@ -246,7 +271,7 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
             </div>
           ) : results.length > 0 ? (
             <ul>
-              {results.map((result) => (
+              {results.map(result => (
                 <li
                   key={result.id}
                   className="p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0"
@@ -256,9 +281,11 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
                     {result.meta.title || 'タイトルなし'}
                   </div>
                   {result.sub_results.length > 0 && (
-                    <div 
+                    <div
                       className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2"
-                      dangerouslySetInnerHTML={{ __html: result.sub_results[0].excerpt }}
+                      dangerouslySetInnerHTML={{
+                        __html: result.sub_results[0].excerpt,
+                      }}
                     />
                   )}
                   <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
@@ -276,4 +303,4 @@ export default function SearchBox({ placeholder = "記事を検索...", classNam
       )}
     </div>
   );
-} 
+}

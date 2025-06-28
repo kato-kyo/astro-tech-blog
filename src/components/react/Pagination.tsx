@@ -7,7 +7,12 @@ interface PaginationProps {
   className?: string;
 }
 
-export default function Pagination({ currentPage, totalPages, baseUrl, className = '' }: PaginationProps) {
+export default function Pagination({
+  currentPage,
+  totalPages,
+  baseUrl,
+  className = '',
+}: PaginationProps) {
   // ページネーションが不要な場合（1ページ以下）は表示しない
   if (totalPages <= 1) {
     return null;
@@ -19,7 +24,11 @@ export default function Pagination({ currentPage, totalPages, baseUrl, className
     const range = [];
     const rangeWithDots = [];
 
-    for (let i = Math.max(2, currentPage - delta); i <= Math.min(totalPages - 1, currentPage + delta); i++) {
+    for (
+      let i = Math.max(2, currentPage - delta);
+      i <= Math.min(totalPages - 1, currentPage + delta);
+      i++
+    ) {
       range.push(i);
     }
 
@@ -52,7 +61,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl, className
 
   // 前のページのURL
   const prevUrl = currentPage > 1 ? getPageUrl(currentPage - 1) : null;
-  
+
   // 次のページのURL
   const nextUrl = currentPage < totalPages ? getPageUrl(currentPage + 1) : null;
 
@@ -178,4 +187,4 @@ export default function Pagination({ currentPage, totalPages, baseUrl, className
       )}
     </nav>
   );
-} 
+}

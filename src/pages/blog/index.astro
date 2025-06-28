@@ -4,6 +4,7 @@ import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import BlogCard from '../../components/react/BlogCard.tsx';
 import Pagination from '../../components/react/Pagination.tsx';
+import { createPageTitle, SITE_CONFIG } from '../../config/site.ts';
 
 import { getCollection } from 'astro:content';
 
@@ -40,8 +41,7 @@ const categories = [
 ---
 
 <BaseLayout
-  title="ブログ記事一覧 - Tech Blog"
-  description="技術記事の一覧ページです。プログラミング、Web開発、インフラなどの記事を公開日順に表示しています。"
+  title={createPageTitle('記事一覧')}
 >
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
@@ -54,13 +54,7 @@ const categories = [
             <h1
               class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4"
             >
-              ブログ記事一覧
-            </h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
-              技術に関する記事や学習記録を公開しています（全 {sortedPosts.length} 記事）
-            </p>
-
-
+              記事一覧
           </div>
         </div>
       </section>

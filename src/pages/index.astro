@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
 import BlogCard from '../components/react/BlogCard.tsx';
+import { SITE_CONFIG, createPageTitle } from '../config/site.ts';
 
 import { getCollection } from 'astro:content';
 
@@ -35,8 +36,8 @@ const popularTags = Object.entries(tagCounts)
 ---
 
 <BaseLayout
-  title="Tech Blog - 技術記事と学習記録"
-  description="技術に関する記事や学習記録、開発の知見を共有するブログです。プログラミング、Web開発、インフラなどの情報を発信しています。"
+  title={createPageTitle()}
+  description={SITE_CONFIG.seo.homeDescription}
 >
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
@@ -54,17 +55,15 @@ const popularTags = Object.entries(tagCounts)
               <span
                 class="bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent"
               >
-                Tech Blog
+                {SITE_CONFIG.title}
               </span>
             </h1>
             <p
               class="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
-            >
-              技術に関する記事や学習記録、開発の知見を共有するブログです。<br />
-              プログラミング、Web開発、インフラなどの情報を発信しています。
-            </p>
-
-
+              set:html={SITE_CONFIG.seo.homeDescription
+                .split('。')
+                .join('。<br />')}
+            />
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -103,9 +102,6 @@ const popularTags = Object.entries(tagCounts)
             >
               最新記事
             </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-300">
-              最近公開した記事をご紹介します
-            </p>
           </div>
 
           {
@@ -150,9 +146,6 @@ const popularTags = Object.entries(tagCounts)
                 <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                   人気のタグ
                 </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-300">
-                  よく使用されているタグから記事を探す
-                </p>
               </div>
 
               <div class="flex flex-wrap justify-center gap-3">

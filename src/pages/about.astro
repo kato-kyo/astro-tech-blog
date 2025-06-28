@@ -2,13 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
+import { createPageTitle, SITE_CONFIG } from '../config/site.ts';
 
 const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout
-  title="About - Tech Blog"
-  description="Tech Blogの管理人のプロフィールページです。経歴、スキル、実績などを紹介しています。"
+  title={createPageTitle('About')}
+  description={SITE_CONFIG.about.description}
 >
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
@@ -33,7 +34,12 @@ const currentPath = Astro.url.pathname;
               About Me
             </h1>
             <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
-              こんにちは！Tech Blogの管理人です。
+              {
+                SITE_CONFIG.about.greeting.replace(
+                  '{siteName}',
+                  SITE_CONFIG.title
+                )
+              }
             </p>
           </div>
         </div>

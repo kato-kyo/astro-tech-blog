@@ -1,4 +1,5 @@
 import React from 'react';
+import { SITE_CONFIG } from '../../config/site';
 
 interface FooterProps {
   className?: string;
@@ -84,12 +85,12 @@ export default function Footer({ className = '' }: FooterProps) {
                 </svg>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Tech Blog
+                {SITE_CONFIG.footer.siteName}
               </span>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
-              技術に関する記事や学習記録、開発の知見を共有するブログです。
-              日々の学習や実務で得た知識を記録し、同じ道を歩む方々と情報を共有しています。
+              {SITE_CONFIG.footer.description}
+              {SITE_CONFIG.footer.extendedDescription}
             </p>
           </div>
 
@@ -141,7 +142,7 @@ export default function Footer({ className = '' }: FooterProps) {
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              © {currentYear} Tech Blog. All rights reserved.
+              © {currentYear} {SITE_CONFIG.footer.copyright}
             </p>
             <div className="flex space-x-6 mt-4 sm:mt-0">
               <a

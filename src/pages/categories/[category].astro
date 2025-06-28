@@ -11,14 +11,20 @@ export async function getStaticPaths() {
   // 記号を削除してカテゴリ名をクリーンアップ
   function sanitizeCategory(category: string): string {
     // 記号を削除（英数字と日本語以外）
-    return category.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '');
+    return category.replace(
+      /[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g,
+      ''
+    );
   }
 
   const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-  const uniqueCategories = [...new Set(allPosts
-    .map(post => post.data.category)
-    .filter(category => category !== undefined)
-  )];
+  const uniqueCategories = [
+    ...new Set(
+      allPosts
+        .map(post => post.data.category)
+        .filter(category => category !== undefined)
+    ),
+  ];
 
   return uniqueCategories.map(category => {
     const filteredPosts = allPosts
@@ -111,7 +117,7 @@ const { posts, category } = Astro.props;
                 >
                   <path
                     d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                  />
+                  ></path>
                 </svg>
                 <span class="text-blue-600 dark:text-blue-400 font-medium"
                   >{category}</span
@@ -188,4 +194,4 @@ const { posts, category } = Astro.props;
 
     <Footer />
   </div>
-</BaseLayout> 
+</BaseLayout>

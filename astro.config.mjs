@@ -3,10 +3,11 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import pagefind from 'astro-pagefind';
 import react from '@astrojs/react';
+import { SITE_CONFIG } from './src/config/site.ts';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://yourdomain.com', // 実際のドメインに変更
+  site: SITE_CONFIG.url, // 設定ファイルから読み込み
   build: {
     format: 'file',
   },
@@ -16,13 +17,13 @@ export default defineConfig({
     }),
     tailwind(),
     sitemap({
-      filter: (page) => {
+      filter: page => {
         // RSS配信やAPI エンドポイントを除外
         return !page.includes('/rss.xml') && !page.includes('/api/');
       },
-      serialize: (item) => {
+      serialize: item => {
         // ページタイプ別の優先度と更新頻度を設定
-        
+
         // ホームページ
         if (item.url.endsWith('/')) {
           item.priority = 1.0;

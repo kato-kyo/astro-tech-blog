@@ -8,7 +8,9 @@ interface ThemeToggleProps {
 
 export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
   const [theme, setTheme] = useState<ThemePreference>('system');
-  const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>('light');
+  const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>(
+    'light'
+  );
   const [mounted, setMounted] = useState(false);
 
   // テーマ設定の取得
@@ -25,7 +27,9 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
   // 実効テーマの計算
   const getEffectiveTheme = (preference: ThemePreference): 'light' | 'dark' => {
     if (preference === 'system' && typeof window !== 'undefined') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
     }
     return preference === 'dark' ? 'dark' : 'light';
   };
@@ -60,7 +64,10 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
         if (currentTheme === 'system') {
           const newEffective = e.matches ? 'dark' : 'light';
           if (typeof document !== 'undefined') {
-            document.documentElement.classList.toggle('dark', newEffective === 'dark');
+            document.documentElement.classList.toggle(
+              'dark',
+              newEffective === 'dark'
+            );
           }
           setEffectiveTheme(newEffective);
         }
@@ -145,7 +152,11 @@ export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
       ) : themeIcon === 'computer' ? (
         // システム設定 - コンピューター/ディスプレイのアイコン
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path fillRule="evenodd" d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15h-3.105a3.501 3.501 0 0 1 1.1 1.677A.75.75 0 0 1 13.26 18H8.74a.75.75 0 0 1-.484-1.323A3.501 3.501 0 0 1 9.355 15H4.25A2.25 2.25 0 0 1 2 12.75V4.25ZM4.25 3.5c-.414 0-.75.336-.75.75v8.5c0 .414.336.75.75.75h11.5c.414 0 .75-.336.75-.75v-8.5c0-.414-.336-.75-.75-.75H4.25Z" clipRule="evenodd" />
+          <path
+            fillRule="evenodd"
+            d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15h-3.105a3.501 3.501 0 0 1 1.1 1.677A.75.75 0 0 1 13.26 18H8.74a.75.75 0 0 1-.484-1.323A3.501 3.501 0 0 1 9.355 15H4.25A2.25 2.25 0 0 1 2 12.75V4.25ZM4.25 3.5c-.414 0-.75.336-.75.75v8.5c0 .414.336.75.75.75h11.5c.414 0 .75-.336.75-.75v-8.5c0-.414-.336-.75-.75-.75H4.25Z"
+            clipRule="evenodd"
+          />
         </svg>
       ) : (
         // ライトモード - 太陽のアイコン
