@@ -21,4 +21,7 @@ pnpm-lock.yaml
 public/
 
 # 設定ファイル
-.env* 
+.env*
+
+# Markdown files
+*.md 
