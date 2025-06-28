@@ -1,12 +1,13 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import { SITE_CONFIG } from '../config/site.ts';
 
 export async function GET(context) {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
 
   return rss({
-    title: 'Tech Blog',
-    description: '技術に関する記事や学習記録、開発の知見を共有するブログです。',
+    title: SITE_CONFIG.rss.title,
+    description: SITE_CONFIG.rss.description,
     site: context.site,
     items: posts
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

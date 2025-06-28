@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
+import { createPageTitle, SITE_CONFIG } from '../../config/site.ts';
 import { getCollection } from 'astro:content';
 
 const currentPath = Astro.url.pathname;
@@ -40,8 +41,8 @@ const sortedTags = Object.entries(tagStats)
 ---
 
 <BaseLayout
-  title="タグ一覧 - Tech Blog"
-  description="ブログで使用されているタグの一覧ページです。興味のあるタグから記事を探すことができます。"
+  title={createPageTitle('タグ一覧')}
+  description={SITE_CONFIG.tags.description}
 >
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
@@ -57,7 +58,7 @@ const sortedTags = Object.entries(tagStats)
               タグ一覧
             </h1>
             <p class="text-lg text-gray-600 dark:text-gray-300">
-              ブログで使用されているタグから記事を探す（全 {sortedTags.length} タグ）
+              {SITE_CONFIG.tags.subtitle}（全 {sortedTags.length} タグ）
             </p>
           </div>
         </div>
