@@ -2,15 +2,10 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
+import CategoryGrid from '../../components/react/CategoryGrid.tsx';
 import { getCollection } from 'astro:content';
 
 const currentPath = Astro.url.pathname;
-
-// 記号を削除してカテゴリ名をクリーンアップ
-function sanitizeCategory(category: string): string {
-  // 記号を削除（英数字と日本語以外）
-  return category.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '');
-}
 
 // 全記事を取得
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
@@ -64,62 +59,10 @@ const sortedCategories = Object.entries(categoryStats)
         </div>
       </section>
 
-      <!-- Categories Grid -->
+      <!-- Categories Grid with Search -->
       <section class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {
-            sortedCategories.length > 0 ? (
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {sortedCategories.map(({ category, count }) => (
-                  <a
-                    href={`/categories/${sanitizeCategory(category)}/`}
-                    class="group block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-                  >
-                    <div class="text-center">
-                      <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-                        <svg
-                          class="w-6 h-6 text-blue-600 dark:text-blue-400"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                        </svg>
-                      </div>
-                      <h2 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
-                        {category}
-                      </h2>
-                      <p class="text-sm text-gray-500 dark:text-gray-400">
-                        {count} 記事
-                      </p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <div class="text-center py-12">
-                <svg
-                  class="mx-auto h-12 w-12 text-gray-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2z"
-                  />
-                </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-                  カテゴリがありません
-                </h3>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  まだカテゴリが作成されていません。
-                </p>
-              </div>
-            )
-          }
+          <CategoryGrid client:load initialCategories={sortedCategories} />
         </div>
       </section>
     </main>
