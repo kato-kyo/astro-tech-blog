@@ -12,6 +12,7 @@ interface NavigationProps {
 const navItems: NavItem[] = [
   { href: '/', label: 'ホーム' },
   { href: '/blog/', label: 'ブログ' },
+  { href: '/categories/', label: 'カテゴリ' },
   { href: '/tags/', label: 'タグ' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'お問い合わせ' },
