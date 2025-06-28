@@ -41,8 +41,7 @@ const categories = [
 ---
 
 <BaseLayout
-  title={createPageTitle('ブログ記事一覧')}
-  description={SITE_CONFIG.blog.description}
+  title={createPageTitle('記事一覧')}
 >
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
@@ -55,13 +54,7 @@ const categories = [
             <h1
               class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4"
             >
-              ブログ記事一覧
-            </h1>
-            <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
-              {SITE_CONFIG.blog.subtitle}（全 {sortedPosts.length} 記事）
-            </p>
-
-
+              記事一覧
           </div>
         </div>
       </section>

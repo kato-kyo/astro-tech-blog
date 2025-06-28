@@ -40,10 +40,7 @@ const sortedTags = Object.entries(tagStats)
   .map(([tag, stats]) => ({ tag, count: stats.count }));
 ---
 
-<BaseLayout
-  title={createPageTitle('タグ一覧')}
-  description={SITE_CONFIG.tags.description}
->
+<BaseLayout title={createPageTitle('タグ一覧')}>
   <div class="min-h-screen flex flex-col">
     <Header currentPath={currentPath} client:load />
 
@@ -58,7 +55,7 @@ const sortedTags = Object.entries(tagStats)
               タグ一覧
             </h1>
             <p class="text-lg text-gray-600 dark:text-gray-300">
-              {SITE_CONFIG.tags.subtitle}（全 {sortedTags.length} タグ）
+              (全 {sortedTags.length} タグ）
             </p>
           </div>
         </div>
