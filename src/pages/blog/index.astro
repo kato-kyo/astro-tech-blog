@@ -4,7 +4,7 @@ import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import BlogCard from '../../components/react/BlogCard.tsx';
 import Pagination from '../../components/react/Pagination.tsx';
-import SearchBox from '../../components/SearchBox.astro';
+
 import { getCollection } from 'astro:content';
 
 const POSTS_PER_PAGE = 12;
@@ -54,7 +54,7 @@ const categories = [
               技術に関する記事や学習記録を公開しています（全 {sortedPosts.length} 記事）
             </p>
 
-            <SearchBox />
+
           </div>
         </div>
       </section>

@@ -12,8 +12,10 @@
 ### 1.2 機能詳細
 - astro-pagefindによる静的サイト全文検索
 - 記事タイトル、本文、メタ情報を対象とした検索
-- 検索結果のハイライト表示
-- 検索ボックスの配置（ヘッダー部分）
+- 検索結果のハイライト表示とドロップダウン表示
+- 検索ボックスのヘッダー配置（デスクトップ・モバイル対応）
+- リアルタイム検索とデバウンス処理
+- キーボードナビゲーション対応（Enter、Escape）
 
 ## 2. アーキテクチャ設計
 
@@ -95,53 +97,78 @@ export default defineConfig({
 
 ### 3.2 SearchBox コンポーネント
 
-**ファイルパス**: `src/components/SearchBox.astro`
+**ファイルパス**: `src/components/react/SearchBox.tsx`
 
 **基本構造**:
-```astro
----
-import Search from 'astro-pagefind/components/Search';
+```tsx
+import React, { useState, useEffect, useRef } from 'react';
 
-export interface Props {
-  id?: string;
-  className?: string;
+interface SearchBoxProps {
   placeholder?: string;
+  className?: string;
+  compact?: boolean;
 }
 
-const {
-  id = 'search',
-  className = 'pagefind-search',
-  placeholder = '記事を検索...',
-} = Astro.props;
----
+export default function SearchBox({ 
+  placeholder = "記事を検索...", 
+  className = "",
+  compact = false 
+}: SearchBoxProps) {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pagefind, setPagefind] = useState<any>(null);
 
-<div class="relative max-w-md mx-auto">
-  <Search
-    id={id}
-    className={className}
-    uiOptions={{
-      showImages: false,
-      showSubResults: true,
-      excerptLength: 15,
-      translations: {
-        placeholder: placeholder,
-        clear_search: '検索をクリア',
-        load_more: 'さらに表示',
-        search_label: 'このサイトを検索',
-        filters_label: 'フィルター',
-        zero_results: '検索結果が見つかりませんでした: [SEARCH_TERM]',
-        many_results: '[COUNT]件の結果が見つかりました: [SEARCH_TERM]',
-        one_result: '1件の結果が見つかりました: [SEARCH_TERM]',
-        alt_search: '[SEARCH_TERM]の検索',
-        search_suggestion: '次を検索してください: [SEARCH_TERM]',
-        searching: '検索中: [SEARCH_TERM]...',
-      },
-    }}
-  />
+  // Pagefindの動的ロードとリアルタイム検索
+  // デバウンス処理、キーボードナビゲーション対応
+  // 検索結果のハイライト表示
+
+  return (
+    <div className="relative">
+      {/* 検索入力フィールド */}
+      <input ... />
+      
+      {/* 検索結果ドロップダウン */}
+      {isOpen && <div>...</div>}
+    </div>
+  );
+}
+```
+
+**機能詳細**:
+- リアルタイム検索（300msデバウンス）
+- 検索結果のドロップダウン表示
+- キーワードハイライト機能
+- キーボードナビゲーション（Enter、Escape）
+- ダークモード対応
+- レスポンシブデザイン
+
+### 3.3 ヘッダー統合
+
+**ファイルパス**: `src/components/react/Header.tsx`
+
+```tsx
+// デスクトップ版検索ボックス
+<div className="hidden md:block flex-1 max-w-md mx-8">
+  <SearchBox compact placeholder="記事を検索..." />
 </div>
 ```
 
-### 3.3 検索対象コンテンツの指定
+**ファイルパス**: `src/components/react/MobileMenu.tsx`
+
+```tsx
+// モバイル版検索ボックス
+<div className="px-4 pt-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+  <SearchBox compact placeholder="記事を検索..." />
+</div>
+```
+
+**UI配置**:
+- **デスクトップ**: ヘッダー中央、ナビゲーションとテーマトグル間
+- **モバイル**: ハンバーガーメニュー内上部、ナビゲーション項目より上
+
+### 3.4 検索対象コンテンツの指定
 
 **BlogLayout.astro での設定**:
 ```astro

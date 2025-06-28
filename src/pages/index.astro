@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
 import BlogCard from '../components/react/BlogCard.tsx';
-import SearchBox from '../components/SearchBox.astro';
+
 import { getCollection } from 'astro:content';
 
 const currentPath = Astro.url.pathname;
@@ -64,10 +64,7 @@ const popularTags = Object.entries(tagCounts)
               プログラミング、Web開発、インフラなどの情報を発信しています。
             </p>
 
-            <!-- Search Box -->
-            <div class="mb-8">
-              <SearchBox />
-            </div>
+
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <a

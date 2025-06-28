@@ -4,7 +4,7 @@ import Header from '../../../components/react/Header.tsx';
 import Footer from '../../../components/react/Footer.tsx';
 import BlogCard from '../../../components/react/BlogCard.tsx';
 import Pagination from '../../../components/react/Pagination.tsx';
-import SearchBox from '../../../components/SearchBox.astro';
+
 import { getCollection } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 
@@ -106,7 +106,7 @@ const seoDescription = currentPage === 1
               )}
             </p>
 
-            <SearchBox />
+
           </div>
         </div>
       </section>
