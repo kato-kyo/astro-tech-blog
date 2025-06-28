@@ -12,6 +12,7 @@
 - **検索機能**: Pagefindによる全文検索
 - **レスポンシブデザイン**: モバイルファーストのレスポンシブ対応
 - **ダークモード**: システム設定に対応したテーマ切り替え
+- **構造化データ**: Schema.org準拠のJSON-LD形式でSEO最適化
 
 ## 🚀 プロジェクト構成
 
@@ -56,8 +57,11 @@
 │   │   ├── index.astro              # ホームページ
 │   │   ├── privacy.astro            # プライバシーポリシー
 │   │   └── rss.xml.js               # RSSフィード
-│   └── styles/                      # スタイルファイル
-│       └── global.css               # グローバルスタイル
+│   ├── styles/                      # スタイルファイル
+│   │   └── global.css               # グローバルスタイル
+│   └── utils/                       # ユーティリティ関数
+│       ├── content.ts               # コンテンツ管理関数
+│       └── structured-data.ts       # 構造化データ生成関数
 ├── astro.config.mjs                 # Astro設定
 ├── eslint.config.js                 # ESLint設定
 ├── package.json                     # 依存関係
@@ -175,6 +179,126 @@ draft: false
 - **コード分割**: コンポーネント単位での適切なコード分割
 - **SEO対応**: メタタグ、構造化データ、サイトマップ
 
+## 🔍 SEO・構造化データ
+
+本サイトは検索エンジン最適化（SEO）のため、Schema.org準拠の構造化データを実装しています。
+
+### 実装済み構造化データ
+
+#### 1. Article Schema（ブログ記事詳細ページ）
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "記事タイトル",
+  "description": "記事の説明",
+  "author": { "@type": "Person", "name": "著者名" },
+  "publisher": { "@type": "Organization", "name": "サイト名" },
+  "datePublished": "2024-01-01T00:00:00.000Z",
+  "dateModified": "2024-01-01T00:00:00.000Z",
+  "url": "https://yourdomain.com/blog/article-slug/",
+  "image": ["https://yourdomain.com/hero-image.jpg"],
+  "keywords": ["tag1", "tag2"],
+  "articleSection": "カテゴリ名"
+}
+```
+
+#### 2. WebSite Schema（サイト全体）
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Tech Blog",
+  "description": "技術に関する記事や学習記録を共有するブログ",
+  "url": "https://yourdomain.com",
+  "author": { "@type": "Person", "name": "著者名" },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://yourdomain.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+```
+
+#### 3. Blog Schema（ブログ一覧ページ）
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Tech Blog - ブログ",
+  "description": "技術に関する記事や学習記録を共有するブログ",
+  "url": "https://yourdomain.com/blog/",
+  "author": { "@type": "Person", "name": "著者名" },
+  "publisher": { "@type": "Organization", "name": "Tech Blog" }
+}
+```
+
+#### 4. BreadcrumbList Schema（パンくずナビゲーション）
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://yourdomain.com/"
+    },
+    {
+      "@type": "ListItem", 
+      "position": 2,
+      "name": "ブログ",
+      "item": "https://yourdomain.com/blog/"
+    }
+  ]
+}
+```
+
+### 構造化データの設定
+
+#### ファイル構成
+- **`src/utils/structured-data.ts`**: 構造化データ生成関数
+- **`src/layouts/BaseLayout.astro`**: WebSite schema、JSON-LD出力
+- **`src/layouts/BlogLayout.astro`**: Article + BreadcrumbList schema
+- **`src/pages/blog/index.astro`**: Blog schema（一覧ページ）
+- **`src/pages/blog/page/[page].astro`**: Blog schema（ページネーション）
+
+#### 実装の特徴
+- **型安全性**: TypeScriptによる完全な型定義
+- **自動生成**: 記事のメタデータから自動的に構造化データを生成
+- **JSON-LD形式**: Google推奨のJSON-LD形式で出力
+- **Schema.org準拠**: 最新のSchema.org仕様に準拠
+- **SEO効果**: リッチスニペット、検索結果の表示改善
+
+#### 確認方法
+構造化データの実装状況は以下のツールで確認できます：
+
+1. **Google Search Console**
+   - [構造化データレポート](https://search.google.com/search-console)で検証
+
+2. **Google Rich Results Test**
+   - [Rich Results Test](https://search.google.com/test/rich-results)でテスト
+
+3. **Schema Markup Validator**
+   - [Schema.org Validator](https://validator.schema.org/)で検証
+
+### 設定のカスタマイズ
+
+構造化データの設定は`src/config/site.ts`で一元管理されています：
+
+```typescript
+export const SITE_CONFIG = {
+  title: 'Tech Blog',
+  author: 'Your Name',  // 構造化データの著者情報に使用
+  url: 'https://yourdomain.com',  // URLの生成に使用
+  seo: {
+    siteName: 'Tech Blog',  // 構造化データのサイト名に使用
+    description: '...',  // 構造化データの説明に使用
+  }
+};
+```
+
 ## 🔧 開発のポイント
 
 ### ハイドレーション戦略
@@ -185,6 +309,11 @@ draft: false
 - React JSXサポート有効化
 - 厳密な型チェック
 - Astroコンポーネントとの型安全な連携
+
+### 構造化データの開発
+- `src/utils/structured-data.ts`で型安全な構造化データ生成
+- 各レイアウトでの適切な構造化データ実装
+- JSON-LD形式でのSEO最適化
 
 ## 📚 参考リンク
 
