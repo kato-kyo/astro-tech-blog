@@ -47,6 +47,14 @@ const socialImageURL = new URL(image ?? '/og-image.jpg', Astro.url).href;
     <!-- Robots -->
     {noindex && <meta name="robots" content="noindex" />}
 
+    <!-- RSS Feed -->
+    <link 
+      rel="alternate" 
+      type="application/rss+xml" 
+      title="Tech Blog RSS Feed" 
+      href="/rss.xml" 
+    />
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
