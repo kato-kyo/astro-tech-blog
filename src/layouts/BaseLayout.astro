@@ -57,41 +57,74 @@ const socialImageURL = new URL(image ?? '/og-image.jpg', Astro.url).href;
 
     <!-- Scripts -->
     <script is:inline>
-      // Theme handling
+      // 3状態テーマ管理（light/dark/system）
       const getThemePreference = () => {
-        if (
-          typeof localStorage !== 'undefined' &&
-          localStorage.getItem('theme')
-        ) {
-          return localStorage.getItem('theme');
+        if (typeof localStorage !== 'undefined') {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark' || stored === 'system') {
+            return stored;
+          }
         }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light';
+        return 'system'; // デフォルトはシステム設定に従う
       };
 
-      const isDark = getThemePreference() === 'dark';
-      document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+      const getEffectiveTheme = (preference) => {
+        if (preference === 'system') {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches 
+            ? 'dark' 
+            : 'light';
+        }
+        return preference;
+      };
 
-      if (typeof localStorage !== 'undefined') {
-        const observer = new MutationObserver(mutations => {
-          // class属性の変更のみを処理
-          const classChanges = mutations.filter(
-            mutation =>
-              mutation.type === 'attributes' &&
-              mutation.attributeName === 'class'
-          );
+      const applyTheme = (theme) => {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      };
 
-          if (classChanges.length > 0) {
-            const darkThemeSelected =
-              document.documentElement.classList.contains('dark');
-            localStorage.setItem('theme', darkThemeSelected ? 'dark' : 'light');
+      // 初期テーマの適用
+      const preference = getThemePreference();
+      const effectiveTheme = getEffectiveTheme(preference);
+      applyTheme(effectiveTheme);
+
+      // システム設定変更の監視
+      if (typeof window !== 'undefined') {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        const handleSystemThemeChange = (e) => {
+          const currentPreference = getThemePreference();
+          if (currentPreference === 'system') {
+            applyTheme(e.matches ? 'dark' : 'light');
           }
-        });
-        observer.observe(document.documentElement, {
-          attributes: true,
-          attributeFilter: ['class'],
-        });
+        };
+
+        mediaQuery.addEventListener('change', handleSystemThemeChange);
+
+        // DOM変更の監視とLocalStorage同期
+        if (typeof localStorage !== 'undefined') {
+          const observer = new MutationObserver(mutations => {
+            const classChanges = mutations.filter(
+              mutation =>
+                mutation.type === 'attributes' &&
+                mutation.attributeName === 'class'
+            );
+
+            if (classChanges.length > 0) {
+              // 手動変更の場合のみLocalStorageを更新
+              // system設定時の自動変更は除外
+              const isDark = document.documentElement.classList.contains('dark');
+              const currentPreference = getThemePreference();
+              
+              if (currentPreference !== 'system') {
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+              }
+            }
+          });
+          
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class'],
+          });
+        }
       }
     </script>
   </head>
