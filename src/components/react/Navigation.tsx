@@ -50,12 +50,16 @@ export default function Navigation({
 
   if (mobile) {
     return (
-      <nav className={`space-y-1 ${className}`}>
+      <nav
+        className={`space-y-1 ${className}`}
+        aria-label="モバイルメインナビゲーション"
+      >
         {navItems.map(item => (
           <a
             key={item.href}
             href={item.href}
             className={getLinkClasses(item.href)}
+            aria-current={isActiveLink(item.href) ? 'page' : undefined}
           >
             {item.label}
           </a>
@@ -65,12 +69,16 @@ export default function Navigation({
   }
 
   return (
-    <nav className={`flex items-center justify-center space-x-8 ${className}`}>
+    <nav
+      className={`flex items-center justify-center space-x-8 ${className}`}
+      aria-label="メインナビゲーション"
+    >
       {navItems.map(item => (
         <a
           key={item.href}
           href={item.href}
           className={getLinkClasses(item.href)}
+          aria-current={isActiveLink(item.href) ? 'page' : undefined}
         >
           {item.label}
         </a>

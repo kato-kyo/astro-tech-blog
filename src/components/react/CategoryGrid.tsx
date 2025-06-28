@@ -42,11 +42,17 @@ export default function CategoryGrid({ initialCategories }: CategoryGridProps) {
 
       {/* カテゴリ一覧表示 */}
       {filteredCategories.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          role="grid"
+          aria-label="カテゴリ一覧"
+        >
           {filteredCategories.map(({ category, count }) => (
             <a
               key={category}
               href={`/categories/${sanitizeCategory(category)}/`}
+              role="gridcell"
+              aria-label={`カテゴリ「${category}」の記事${count}件を表示`}
               className="group block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900"
             >
               <div className="text-center">
@@ -55,6 +61,7 @@ export default function CategoryGrid({ initialCategories }: CategoryGridProps) {
                     className="w-6 h-6 text-blue-600 dark:text-blue-400"
                     fill="currentColor"
                     viewBox="0 0 20 20"
+                    aria-hidden="true"
                   >
                     <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                   </svg>
@@ -62,7 +69,10 @@ export default function CategoryGrid({ initialCategories }: CategoryGridProps) {
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
                   {category}
                 </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p
+                  className="text-sm text-gray-500 dark:text-gray-400"
+                  aria-label={`このカテゴリには${count}件の記事があります`}
+                >
                   {count} 記事
                 </p>
               </div>
@@ -72,7 +82,7 @@ export default function CategoryGrid({ initialCategories }: CategoryGridProps) {
       ) : (
         // 検索中でない場合のみ「カテゴリがありません」メッセージを表示
         !searchQuery && (
-          <div className="text-center py-12">
+          <div className="text-center py-12" role="status" aria-live="polite">
             <svg
               className="mx-auto h-12 w-12 text-gray-400"
               fill="none"

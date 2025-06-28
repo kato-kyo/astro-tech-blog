@@ -32,8 +32,8 @@ interface PagefindResult {
 
 interface PagefindAPI {
   search: (
-    _searchQuery: string,
-    _options?: { limit?: number; excerpt_length?: number }
+    query: string,
+    options?: { limit?: number; excerpt_length?: number }
   ) => Promise<{
     results: PagefindResult[];
   }>;
@@ -269,6 +269,17 @@ export default function SearchBox({
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
+          role="combobox"
+          aria-label="記事検索"
+          aria-describedby="search-help"
+          aria-expanded={isOpen && results.length > 0}
+          aria-haspopup="listbox"
+          aria-activedescendant={
+            selectedIndex >= 0 && results.length > 0
+              ? `search-result-${selectedIndex}`
+              : undefined
+          }
+          aria-autocomplete="list"
           className={`
             w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 
             rounded-lg bg-white dark:bg-gray-800 
@@ -280,16 +291,25 @@ export default function SearchBox({
           `}
         />
 
+        {/* ヘルプテキスト（スクリーンリーダー用） */}
+        <div id="search-help" className="sr-only">
+          検索後、矢印キーで結果を選択し、Enterで移動できます
+        </div>
+
         {/* 検索アイコン */}
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           {isLoading ? (
-            <div className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+            <div
+              className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+              aria-label="検索中"
+            ></div>
           ) : (
             <svg
               className="h-4 w-4 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 strokeLinecap="round"
@@ -304,9 +324,18 @@ export default function SearchBox({
 
       {/* 検索結果ドロップダウン */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+        <div
+          className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"
+          role="region"
+          aria-live="polite"
+          aria-label="検索結果"
+        >
           {isLoading ? (
-            <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+            <div
+              className="p-4 text-center text-gray-500 dark:text-gray-400"
+              role="status"
+              aria-live="polite"
+            >
               検索中...
             </div>
           ) : results.length > 0 ? (
@@ -314,9 +343,11 @@ export default function SearchBox({
               {results.map((result, index) => (
                 <li
                   key={result.id}
+                  id={`search-result-${index}`}
                   data-result-index={index}
                   role="option"
                   aria-selected={index === selectedIndex}
+                  aria-label={`${result.meta.title || 'タイトルなし'} - ${result.url}`}
                   className={`p-3 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-b-0 transition-colors focus:outline-none ${
                     index === selectedIndex
                       ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-900 dark:text-primary-100'
@@ -359,7 +390,11 @@ export default function SearchBox({
               ))}
             </ul>
           ) : query.trim() && !isLoading ? (
-            <div className="p-4 text-center text-gray-500 dark:text-gray-400">
+            <div
+              className="p-4 text-center text-gray-500 dark:text-gray-400"
+              role="status"
+              aria-live="polite"
+            >
               "{query}" の検索結果が見つかりませんでした
             </div>
           ) : null}
