@@ -1,0 +1,4 @@
+[submodule "src/content"]
+	path = src/content
+	url = https://github.com/kato-kyo/astro-tech-blog-content.git
+	branch = develop
