@@ -3,6 +3,7 @@ title: "Node.jsパフォーマンス最適化"
 description: "Node.jsアプリケーションのパフォーマンス最適化手法とベストプラクティスを詳しく解説します。"
 pubDate: 2024-01-18
 heroImage: "/images/nodejs-performance.jpg"
+emoji: "🚀"
 tags: ["Node.js", "パフォーマンス", "バックエンド", "最適化"]
 category: "バックエンド"
 draft: false
