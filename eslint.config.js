@@ -3,6 +3,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import astroEslintPlugin from 'eslint-plugin-astro';
+import reactPlugin from 'eslint-plugin-react';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 const compat = new FlatCompat({
@@ -43,11 +44,16 @@ export default [
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,
+      react: reactPlugin,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
+      'react/prop-types': 'off', // TypeScriptを使用しているため無効化
+      'react/react-in-jsx-scope': 'off', // React 17+では不要
     },
   },
 
@@ -69,7 +75,7 @@ export default [
   {
     rules: {
       'no-console': 'warn',
-      'no-unused-vars': 'error',
+      'no-unused-vars': 'off', // TypeScript用の@typescript-eslint/no-unused-varsを優先
       'prefer-const': 'error',
       'no-var': 'error',
     },

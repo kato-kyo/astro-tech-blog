@@ -39,8 +39,8 @@ export default function SocialShare({
         document.execCommand('copy');
         document.body.removeChild(textArea);
       }
-    } catch (err) {
-      console.error('URLのコピーに失敗しました:', err);
+    } catch {
+      // URLのコピーに失敗した場合は何もしない
     }
   };
 
