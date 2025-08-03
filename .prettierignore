@@ -25,3 +25,6 @@ public/
 
 # Markdown files
 *.md 
+
+# serena mcp
+.serena/

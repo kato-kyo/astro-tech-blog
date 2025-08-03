@@ -6,7 +6,10 @@ import BlogCard from '../../components/react/BlogCard.tsx';
 import Pagination from '../../components/react/Pagination.tsx';
 import { createPageTitle } from '../../config/site.ts';
 import { getSortedBlogPosts } from '../../utils/content.ts';
-import { generateBlogStructuredData, toJsonLd } from '../../utils/structured-data';
+import {
+  generateBlogStructuredData,
+  toJsonLd,
+} from '../../utils/structured-data';
 
 const POSTS_PER_PAGE = 12;
 const currentPath = Astro.url.pathname;
@@ -102,7 +105,7 @@ const structuredDataJson = toJsonLd(blogStructuredData);
                   ))}
                 </div>
 
-                <!-- ページネーション -->
+                {/* ページネーション */}
                 <div class="mt-12">
                   <Pagination
                     currentPage={currentPage}

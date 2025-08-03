@@ -7,7 +7,10 @@ import Pagination from '../../../components/react/Pagination.tsx';
 
 import { getSortedBlogPosts } from '../../../utils/content.ts';
 import type { GetStaticPaths } from 'astro';
-import { generateBlogStructuredData, toJsonLd } from '../../../utils/structured-data';
+import {
+  generateBlogStructuredData,
+  toJsonLd,
+} from '../../../utils/structured-data';
 
 // 定数定義
 const POSTS_PER_PAGE = 12;
@@ -56,19 +59,20 @@ const categories = [
 ];
 
 // SEO用のメタデータ
-const seoTitle = currentPage === 1 
-  ? 'ブログ記事一覧 - Tech Blog'
-  : `ブログ記事一覧 (${currentPage}ページ目) - Tech Blog`;
+const seoTitle =
+  currentPage === 1
+    ? 'ブログ記事一覧 - Tech Blog'
+    : `ブログ記事一覧 (${currentPage}ページ目) - Tech Blog`;
 
-const seoDescription = currentPage === 1
-  ? `技術記事の一覧ページです。プログラミング、Web開発、インフラなどの記事を公開日順に表示しています。全${totalPosts}記事。`
-  : `技術記事の一覧ページ（${currentPage}ページ目）です。全${totalPosts}記事中、${((currentPage - 1) * POSTS_PER_PAGE) + 1}-${Math.min(currentPage * POSTS_PER_PAGE, totalPosts)}記事目を表示。`;
+const seoDescription =
+  currentPage === 1
+    ? `技術記事の一覧ページです。プログラミング、Web開発、インフラなどの記事を公開日順に表示しています。全${totalPosts}記事。`
+    : `技術記事の一覧ページ（${currentPage}ページ目）です。全${totalPosts}記事中、${(currentPage - 1) * POSTS_PER_PAGE + 1}-${Math.min(currentPage * POSTS_PER_PAGE, totalPosts)}記事目を表示。`;
 
 // Blog構造化データ生成
 const blogUrl = new URL('/blog/', Astro.site).href;
 const blogStructuredData = generateBlogStructuredData(blogUrl);
 const structuredDataJson = toJsonLd(blogStructuredData);
-
 ---
 
 <BaseLayout
@@ -88,24 +92,29 @@ const structuredDataJson = toJsonLd(blogStructuredData);
               class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4"
             >
               ブログ記事一覧
-              {currentPage > 1 && (
-                <span class="text-lg font-normal text-gray-600 dark:text-gray-300 ml-2">
-                  ({currentPage}ページ目)
-                </span>
-              )}
+              {
+                currentPage > 1 && (
+                  <span class="text-lg font-normal text-gray-600 dark:text-gray-300 ml-2">
+                    ({currentPage}ページ目)
+                  </span>
+                )
+              }
             </h1>
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
               <br />
-              {currentPage > 1 ? (
-                <span>
-                  全{totalPosts}記事中 {((currentPage - 1) * POSTS_PER_PAGE) + 1}-{Math.min(currentPage * POSTS_PER_PAGE, totalPosts)}記事目を表示
-                </span>
-              ) : (
-                <span>全 {totalPosts} 記事</span>
-              )}
+              {
+                currentPage > 1 ? (
+                  <span>
+                    全{totalPosts}記事中{' '}
+                    {(currentPage - 1) * POSTS_PER_PAGE + 1}-
+                    {Math.min(currentPage * POSTS_PER_PAGE, totalPosts)}
+                    記事目を表示
+                  </span>
+                ) : (
+                  <span>全 {totalPosts} 記事</span>
+                )
+              }
             </p>
-
-
           </div>
         </div>
       </section>
@@ -153,7 +162,7 @@ const structuredDataJson = toJsonLd(blogStructuredData);
                   ))}
                 </div>
 
-                <!-- ページネーション -->
+                {/* ページネーション */}
                 <div class="mt-12">
                   <Pagination
                     currentPage={currentPage}
@@ -194,4 +203,4 @@ const structuredDataJson = toJsonLd(blogStructuredData);
 
     <Footer />
   </div>
-</BaseLayout> 
+</BaseLayout>

@@ -8,7 +8,7 @@ import { SITE_CONFIG } from '../config/site.ts';
 if (!SITE_CONFIG.pages.showContact) {
   return new Response(null, {
     status: 404,
-    statusText: 'Not found'
+    statusText: 'Not found',
   });
 }
 

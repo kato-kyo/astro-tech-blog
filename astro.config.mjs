@@ -29,7 +29,7 @@ export default defineConfig({
       {
         protocol: 'https',
         hostname: '**.cdninstagram.com',
-      }
+      },
     ],
   },
   integrations: [
@@ -43,7 +43,7 @@ export default defineConfig({
         if (page.includes('/rss.xml') || page.includes('/api/')) {
           return false;
         }
-        
+
         // 設定で無効化されたページを除外
         if (page.includes('/about') && !SITE_CONFIG.pages.showAbout) {
           return false;
@@ -51,7 +51,7 @@ export default defineConfig({
         if (page.includes('/contact') && !SITE_CONFIG.pages.showContact) {
           return false;
         }
-        
+
         return true;
       },
       serialize: item => {
