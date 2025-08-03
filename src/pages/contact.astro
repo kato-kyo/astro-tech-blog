@@ -2,6 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
+import { SITE_CONFIG } from '../config/site.ts';
+
+// ページが無効化されている場合は404を返す
+if (!SITE_CONFIG.pages.showContact) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found'
+  });
+}
 
 const currentPath = Astro.url.pathname;
 ---

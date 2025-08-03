@@ -40,7 +40,19 @@ export default defineConfig({
     sitemap({
       filter: page => {
         // RSS配信やAPI エンドポイントを除外
-        return !page.includes('/rss.xml') && !page.includes('/api/');
+        if (page.includes('/rss.xml') || page.includes('/api/')) {
+          return false;
+        }
+        
+        // 設定で無効化されたページを除外
+        if (page.includes('/about') && !SITE_CONFIG.pages.showAbout) {
+          return false;
+        }
+        if (page.includes('/contact') && !SITE_CONFIG.pages.showContact) {
+          return false;
+        }
+        
+        return true;
       },
       serialize: item => {
         // ページタイプ別の優先度と更新頻度を設定
