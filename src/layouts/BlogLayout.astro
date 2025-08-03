@@ -14,7 +14,6 @@ import {
   generateBreadcrumbStructuredData,
   toJsonLd,
 } from '../utils/structured-data';
-import ImageWithFallback from '../components/react/ImageWithFallback.tsx';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -26,7 +25,7 @@ const {
   description,
   pubDate,
   updatedDate,
-  heroImage,
+  emoji,
   tags,
   category,
   draft,
@@ -65,7 +64,7 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
 <BaseLayout
   title={title}
   description={description}
-  image={heroImage}
+  image={emoji}
   structuredData={[structuredDataJson, breadcrumbJson]}
 >
   <div class="min-h-screen flex flex-col">
@@ -82,23 +81,6 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
       <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Hero Section -->
         <header class="mb-8 lg:mb-12">
-          {
-            heroImage && (
-              <div class="mb-8 aspect-video rounded-lg overflow-hidden">
-                <ImageWithFallback
-                  src={heroImage}
-                  alt={title}
-                  width={1200}
-                  height={675}
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-                  client:load
-                />
-              </div>
-            )
-          }
-
           <!-- Breadcrumb -->
           <nav class="flex justify-center mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
@@ -217,8 +199,15 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
             }
 
             <h1
-              class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight"
+              class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight flex items-center gap-3"
             >
+              {
+                emoji && (
+                  <span class="text-4xl" role="img" aria-label="記事のアイコン">
+                    {emoji}
+                  </span>
+                )
+              }
               {title}
             </h1>
 

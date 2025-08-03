@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
-import ImageWithFallback from '../components/react/ImageWithFallback.tsx';
 import { SITE_CONFIG, createPageTitle } from '../config/site.ts';
 
 import { getCollection } from 'astro:content';
@@ -109,8 +108,7 @@ const popularTags = Object.entries(tagCounts)
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                 {recentPosts.map(post => {
                   const { slug, data } = post;
-                  const { title, description, heroImage, pubDate, category } =
-                    data;
+                  const { title, description, emoji, pubDate, category } = data;
                   const readingTimeStats = { text: '3 min read' }; // Simplified for now
 
                   return (
@@ -119,20 +117,6 @@ const popularTags = Object.entries(tagCounts)
                         href={`/blog/${slug}/`}
                         class="block relative focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900 rounded-lg"
                       >
-                        {heroImage && (
-                          <div class="aspect-video overflow-hidden">
-                            <ImageWithFallback
-                              src={heroImage}
-                              alt={title}
-                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                              width={400}
-                              height={225}
-                              loading="lazy"
-                              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                              client:load
-                            />
-                          </div>
-                        )}
                         <div class="p-6">
                           <div class="flex items-center gap-4 mb-3 text-sm text-gray-500 dark:text-gray-400">
                             <time datetime={pubDate.toISOString()}>
@@ -162,7 +146,16 @@ const popularTags = Object.entries(tagCounts)
                               </span>
                             )}
                           </div>
-                          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                          <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 flex items-center gap-2">
+                            {emoji && (
+                              <span
+                                class="text-2xl"
+                                role="img"
+                                aria-label="記事のアイコン"
+                              >
+                                {emoji}
+                              </span>
+                            )}
                             <span class="hover:underline">{title}</span>
                           </h2>
                           <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">

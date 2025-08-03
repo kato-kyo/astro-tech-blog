@@ -10,8 +10,7 @@ interface BlogCardProps {
 
 export default function BlogCard({ post, className = '' }: BlogCardProps) {
   const { slug, data } = post;
-  const { title, description, heroImage, pubDate, tags, category, draft } =
-    data;
+  const { title, description, emoji, pubDate, tags, category, draft } = data;
 
   const stats = readingTime(post.body);
 
@@ -40,20 +39,6 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
         className="block relative focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900 rounded-lg"
         aria-label={`ブログ記事「${title}」を読む`}
       >
-        {heroImage && (
-          <div className="aspect-video overflow-hidden">
-            <img
-              src={heroImage}
-              alt={title}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              width={400}
-              height={225}
-              loading="lazy"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          </div>
-        )}
-
         <div className="p-6">
           <div
             className="flex items-center gap-4 mb-3 text-sm text-gray-500 dark:text-gray-400"
@@ -97,9 +82,14 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
           </div>
 
           <h2
-            className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2"
+            className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2 flex items-center gap-2"
             id={`blog-title-${slug}`}
           >
+            {emoji && (
+              <span className="text-2xl" role="img" aria-label="記事のアイコン">
+                {emoji}
+              </span>
+            )}
             <span className="hover:underline">{title}</span>
           </h2>
 
