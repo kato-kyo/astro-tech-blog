@@ -3,7 +3,7 @@
 ## 1. システム概要
 
 ### 1.1 システム名
-Tech Blog (astoro-tech-blog)
+Tech Blog (astro-tech-blog)
 
 ### 1.2 システムアーキテクチャ
 ```

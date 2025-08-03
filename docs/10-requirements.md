@@ -3,7 +3,7 @@
 ## 1. プロジェクト概要
 
 ### 1.1 プロジェクト名
-Tech Blog (astoro-tech-blog)
+Tech Blog (astro-tech-blog)
 
 ### 1.2 プロジェクトの目的
 技術に関する記事や学習記録、開発の知見を共有するブログサイトの構築・運営
