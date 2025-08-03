@@ -1,3 +1,5 @@
+import { SITE_CONFIG } from '../../config/site';
+
 interface NavItem {
   href: string;
   label: string;
@@ -9,7 +11,7 @@ interface NavigationProps {
   className?: string;
 }
 
-const navItems: NavItem[] = [
+const allNavItems: NavItem[] = [
   { href: '/', label: 'ホーム' },
   { href: '/blog/', label: 'ブログ' },
   { href: '/categories/', label: 'カテゴリ' },
@@ -17,6 +19,17 @@ const navItems: NavItem[] = [
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'お問い合わせ' },
 ];
+
+// 設定値に基づいてナビゲーションアイテムをフィルタリング
+const navItems: NavItem[] = allNavItems.filter(item => {
+  if (item.href === '/about/' && !SITE_CONFIG.pages.showAbout) {
+    return false;
+  }
+  if (item.href === '/contact/' && !SITE_CONFIG.pages.showContact) {
+    return false;
+  }
+  return true;
+});
 
 export default function Navigation({
   mobile = false,

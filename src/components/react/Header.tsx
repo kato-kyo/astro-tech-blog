@@ -14,13 +14,24 @@ interface HeaderProps {
   currentPath: string;
 }
 
-const navItems: NavItem[] = [
+const allNavItems: NavItem[] = [
   { href: '/', label: 'ホーム' },
   { href: '/blog/', label: 'ブログ' },
   { href: '/tags/', label: 'タグ' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'お問い合わせ' },
 ];
+
+// 設定値に基づいてナビゲーションアイテムをフィルタリング
+const navItems: NavItem[] = allNavItems.filter(item => {
+  if (item.href === '/about/' && !SITE_CONFIG.pages.showAbout) {
+    return false;
+  }
+  if (item.href === '/contact/' && !SITE_CONFIG.pages.showContact) {
+    return false;
+  }
+  return true;
+});
 
 export default function Header({ currentPath }: HeaderProps) {
   return (

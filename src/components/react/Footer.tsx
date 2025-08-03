@@ -16,12 +16,23 @@ interface SocialLink {
   IconComponent: React.ComponentType;
 }
 
-const quickLinks: LinkItem[] = [
+const allQuickLinks: LinkItem[] = [
   { href: '/blog/', label: 'ブログ一覧' },
   { href: '/tags/', label: 'タグ一覧' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'お問い合わせ' },
 ];
+
+// 設定値に基づいてクイックリンクをフィルタリング
+const quickLinks: LinkItem[] = allQuickLinks.filter(item => {
+  if (item.href === '/about/' && !SITE_CONFIG.pages.showAbout) {
+    return false;
+  }
+  if (item.href === '/contact/' && !SITE_CONFIG.pages.showContact) {
+    return false;
+  }
+  return true;
+});
 
 const GitHubIcon = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
