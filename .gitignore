@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # serena cache
 .serena/cache/
+
+# Local Netlify folder
+.netlify

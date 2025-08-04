@@ -21,21 +21,29 @@
 ├── public/                          # 静的ファイル
 │   ├── favicon.svg
 │   ├── og-image.jpg
-│   └── robots.txt
 ├── src/
 │   ├── assets/                      # アセットファイル
 │   │   ├── astro.svg
 │   │   └── background.svg
 │   ├── components/                  # コンポーネント
 │   │   ├── react/                   # Reactコンポーネント
-│   │   │   ├── BlogCard.tsx         # ブログカードコンポーネント
-│   │   │   ├── Footer.tsx           # フッターコンポーネント
-│   │   │   ├── Header.tsx           # ヘッダーコンポーネント
-│   │   │   ├── MobileMenu.tsx       # モバイルメニューコンポーネント
-│   │   │   ├── Navigation.tsx       # ナビゲーションコンポーネント
-│   │   │   ├── TableOfContents.tsx  # 目次コンポーネント
-│   │   │   ├── ThemeToggle.tsx      # テーマ切り替えコンポーネント
-│   │   │   └── Welcome.tsx          # ウェルカムコンポーネント
+│   │   │   ├── BlogCard.tsx              # ブログカードコンポーネント
+│   │   │   ├── CategoryGrid.tsx          # カテゴリグリッド
+│   │   │   ├── CategorySearch.tsx        # カテゴリ検索
+│   │   │   ├── Footer.tsx                # フッターコンポーネント
+│   │   │   ├── Header.tsx                # ヘッダーコンポーネント
+│   │   │   ├── ImageWithFallback.tsx     # フォールバック付き画像
+│   │   │   ├── MobileMenu.tsx            # モバイルメニューコンポーネント
+│   │   │   ├── MobileTableOfContents.tsx # モバイル目次
+│   │   │   ├── Navigation.tsx            # ナビゲーションコンポーネント
+│   │   │   ├── Pagination.tsx            # ページネーション
+│   │   │   ├── SearchBox.tsx             # 検索ボックス
+│   │   │   ├── SocialShare.tsx           # ソーシャルシェア
+│   │   │   ├── TableOfContents.tsx       # 目次コンポーネント
+│   │   │   ├── TagGrid.tsx               # タググリッド
+│   │   │   ├── TagSearch.tsx             # タグ検索
+│   │   │   ├── ThemeToggle.tsx           # テーマ切り替えコンポーネント
+│   │   │   └── Welcome.tsx               # ウェルカムコンポーネント
 │   │   └── SearchBox.astro          # 検索ボックス（Astro）
 │   ├── content/                     # コンテンツファイル
 │   │   ├── blog/                    # ブログ記事
@@ -88,17 +96,26 @@
 
 ## 🎨 コンポーネント設計
 
-### Reactコンポーネント（8個）
+### Reactコンポーネント（17個）
 インタラクティブな機能を持つコンポーネントはReactで実装：
 
 - **Header**: サイトヘッダー（ナビゲーション統合）
 - **Navigation**: メインナビゲーション（デスクトップ・モバイル対応）
 - **Footer**: サイトフッター（リンク・SNS・著作権情報）
 - **BlogCard**: ブログ記事カード（サムネイル・メタ情報）
-- **ThemeToggle**: ダークモード切り替えボタン
+- **ThemeToggle**: ダークモード切り替えボタン  
 - **TableOfContents**: 記事目次（スクロール連動）
 - **MobileMenu**: モバイル用ハンバーガーメニュー
+- **MobileTableOfContents**: モバイル版記事目次
 - **Welcome**: ヒーローセクション（アニメーション付き）
+- **SearchBox**: 検索機能（Pagefind統合）
+- **CategoryGrid**: カテゴリ一覧表示
+- **CategorySearch**: カテゴリ検索・フィルタリング
+- **TagGrid**: タグ一覧表示
+- **TagSearch**: タグ検索・フィルタリング
+- **Pagination**: ページネーション機能
+- **SocialShare**: ソーシャルメディア共有ボタン
+- **ImageWithFallback**: フォールバック機能付き画像表示
 
 ### Astroコンポーネント（3個）
 静的な機能やレイアウトはAstroで実装：
@@ -285,18 +302,16 @@ draft: false
 
 ### 設定のカスタマイズ
 
-構造化データの設定は`src/config/site.ts`で一元管理されています：
+構造化データの設定は`src/content/site/config.yaml`で一元管理されています：
 
-```typescript
-export const SITE_CONFIG = {
-  title: 'Tech Blog',
-  author: 'Your Name',  // 構造化データの著者情報に使用
-  url: 'https://yourdomain.com',  // URLの生成に使用
-  seo: {
-    siteName: 'Tech Blog',  // 構造化データのサイト名に使用
-    description: '...',  // 構造化データの説明に使用
-  }
-};
+```yaml
+# src/content/site/config.yaml
+title: Tech Blog
+author: Your Name  # 構造化データの著者情報に使用
+url: https://yourdomain.com  # URLの生成に使用
+seo:
+  siteName: Tech Blog  # 構造化データのサイト名に使用
+  description: '...'  # 構造化データの説明に使用
 ```
 
 ## 🔧 開発のポイント
