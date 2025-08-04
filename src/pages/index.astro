@@ -2,11 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
-import { SITE_CONFIG, createPageTitle } from '../config/site.ts';
+import { getSiteConfig, createPageTitle } from '../utils/site-config.ts';
 
 import { getCollection } from 'astro:content';
 
 const currentPath = Astro.url.pathname;
+const siteConfig = await getSiteConfig();
 
 // 最新記事を取得（下書きを除く）
 const allPosts = await getCollection('blog', ({ data }) => {
@@ -35,11 +36,11 @@ const popularTags = Object.entries(tagCounts)
 ---
 
 <BaseLayout
-  title={createPageTitle()}
-  description={SITE_CONFIG.seo.homeDescription}
+  title={await createPageTitle()}
+  description={siteConfig.seo.homeDescription}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- Hero Section -->
@@ -54,12 +55,12 @@ const popularTags = Object.entries(tagCounts)
               <span
                 class="bg-gradient-to-r from-primary-600 to-primary-500 bg-clip-text text-transparent"
               >
-                {SITE_CONFIG.title}
+                {siteConfig.title}
               </span>
             </h1>
             <p
               class="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed"
-              set:html={SITE_CONFIG.seo.homeDescription
+              set:html={siteConfig.seo.homeDescription
                 .split('。')
                 .join('。<br />')}
             />
@@ -243,6 +244,6 @@ const popularTags = Object.entries(tagCounts)
       }
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

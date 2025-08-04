@@ -3,9 +3,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import TagGrid from '../../components/react/TagGrid.tsx';
-import { createPageTitle } from '../../config/site.ts';
+import { createPageTitle, getSiteConfig } from '../../utils/site-config.ts';
 import { getBlogPosts } from '../../utils/content.ts';
 
+const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
 
 // 全記事を取得（環境に応じてドラフトを表示）
@@ -35,9 +36,9 @@ const sortedTags = Object.entries(tagStats)
   .map(([tag, stats]) => ({ tag, count: stats.count }));
 ---
 
-<BaseLayout title={createPageTitle('タグ一覧')}>
+<BaseLayout title={await createPageTitle('タグ一覧')}>
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
@@ -64,6 +65,6 @@ const sortedTags = Object.entries(tagStats)
       </section>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

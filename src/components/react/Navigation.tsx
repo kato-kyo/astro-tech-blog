@@ -1,14 +1,20 @@
-import { SITE_CONFIG } from '../../config/site';
-
 interface NavItem {
   href: string;
   label: string;
+}
+
+interface SiteConfig {
+  pages: {
+    showAbout: boolean;
+    showContact: boolean;
+  };
 }
 
 interface NavigationProps {
   mobile?: boolean;
   currentPath: string;
   className?: string;
+  siteConfig: SiteConfig;
 }
 
 const allNavItems: NavItem[] = [
@@ -20,22 +26,22 @@ const allNavItems: NavItem[] = [
   { href: '/contact/', label: 'お問い合わせ' },
 ];
 
-// 設定値に基づいてナビゲーションアイテムをフィルタリング
-const navItems: NavItem[] = allNavItems.filter(item => {
-  if (item.href === '/about/' && !SITE_CONFIG.pages.showAbout) {
-    return false;
-  }
-  if (item.href === '/contact/' && !SITE_CONFIG.pages.showContact) {
-    return false;
-  }
-  return true;
-});
-
 export default function Navigation({
   mobile = false,
   currentPath,
   className = '',
+  siteConfig,
 }: NavigationProps) {
+  // 設定値に基づいてナビゲーションアイテムをフィルタリング
+  const navItems: NavItem[] = allNavItems.filter(item => {
+    if (item.href === '/about/' && !siteConfig.pages.showAbout) {
+      return false;
+    }
+    if (item.href === '/contact/' && !siteConfig.pages.showContact) {
+      return false;
+    }
+    return true;
+  });
   const isActiveLink = (href: string) => {
     return (
       currentPath === href || (href !== '/' && currentPath.startsWith(href))

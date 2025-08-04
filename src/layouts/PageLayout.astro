@@ -5,20 +5,22 @@ import Footer from '../components/react/Footer.tsx';
 import ProfileSection from '../components/page/ProfileSection.astro';
 import SkillsSection from '../components/page/SkillsSection.astro';
 import ExperienceSection from '../components/page/ExperienceSection.astro';
-import { createPageTitle } from '../config/site.ts';
+import { createPageTitle, getSiteConfig } from '../utils/site-config.ts';
 
 const { pageData } = Astro.props;
 const currentPath = Astro.url.pathname;
+const siteConfig = await getSiteConfig();
 
 // SEO設定
-const title = pageData.seo?.metaTitle || createPageTitle(pageData.title);
+const title =
+  pageData.seo?.metaTitle || (await createPageTitle(pageData.title));
 const description = pageData.seo?.metaDescription || pageData.description;
 const ogImage = pageData.seo?.ogImage;
 ---
 
 <BaseLayout title={title} description={description} image={ogImage}>
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- プロフィールセクション -->
@@ -127,6 +129,6 @@ const ogImage = pageData.seo?.ogImage;
       </div>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

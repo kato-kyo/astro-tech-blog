@@ -4,7 +4,7 @@ import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import BlogCard from '../../components/react/BlogCard.tsx';
 import Pagination from '../../components/react/Pagination.tsx';
-import { createPageTitle } from '../../config/site.ts';
+import { createPageTitle, getSiteConfig } from '../../utils/site-config.ts';
 import { getSortedBlogPosts } from '../../utils/content.ts';
 import {
   generateBlogStructuredData,
@@ -13,6 +13,7 @@ import {
 
 const POSTS_PER_PAGE = 12;
 const currentPath = Astro.url.pathname;
+const siteConfig = await getSiteConfig();
 
 // 記号を削除してカテゴリ名をクリーンアップ
 function sanitizeCategory(category: string): string {
@@ -42,11 +43,11 @@ const structuredDataJson = toJsonLd(blogStructuredData);
 ---
 
 <BaseLayout
-  title={createPageTitle('記事一覧')}
+  title={await createPageTitle('記事一覧')}
   structuredData={[structuredDataJson]}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
@@ -144,6 +145,6 @@ const structuredDataJson = toJsonLd(blogStructuredData);
       </section>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

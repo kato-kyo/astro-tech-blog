@@ -4,7 +4,9 @@ import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import BlogCard from '../../components/react/BlogCard.tsx';
 import { getBlogPosts } from '../../utils/content.ts';
+import { getSiteConfig, createPageTitle } from '../../utils/site-config.ts';
 
+const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
 
 export async function getStaticPaths() {
@@ -38,7 +40,7 @@ const { posts, tag } = Astro.props;
   description={`「${tag}」タグが付いた記事の一覧ページです。${posts.length}件の記事があります。`}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
@@ -183,6 +185,6 @@ const { posts, tag } = Astro.props;
       </section>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

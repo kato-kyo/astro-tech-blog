@@ -6,7 +6,7 @@
  */
 
 import type { CollectionEntry } from 'astro:content';
-import { SITE_CONFIG } from '../config/site';
+import { getSiteConfig } from './site-config';
 
 // ===========================================
 // 型定義
@@ -93,10 +93,10 @@ export interface BlogStructuredData extends StructuredDataBase {
 // Article Schema（ブログ記事詳細用）
 // ===========================================
 
-export function generateArticleStructuredData(
+export async function generateArticleStructuredData(
   post: CollectionEntry<'blog'>,
   url: string
-): ArticleStructuredData {
+): Promise<ArticleStructuredData> {
   const {
     title,
     description,
@@ -107,6 +107,8 @@ export function generateArticleStructuredData(
     category,
   } = post.data;
 
+  const siteConfig = await getSiteConfig();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -114,11 +116,11 @@ export function generateArticleStructuredData(
     description: description,
     author: {
       '@type': 'Person',
-      name: SITE_CONFIG.author,
+      name: siteConfig.author,
     },
     publisher: {
       '@type': 'Organization',
-      name: SITE_CONFIG.seo.siteName,
+      name: siteConfig.seo.siteName,
     },
     datePublished: pubDate.toISOString(),
     dateModified: (updatedDate || pubDate).toISOString(),
@@ -137,18 +139,20 @@ export function generateArticleStructuredData(
 // WebSite Schema（サイト全体用）
 // ===========================================
 
-export function generateWebSiteStructuredData(
+export async function generateWebSiteStructuredData(
   url: string
-): WebSiteStructuredData {
+): Promise<WebSiteStructuredData> {
+  const siteConfig = await getSiteConfig();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: SITE_CONFIG.seo.siteName,
-    description: SITE_CONFIG.seo.description,
+    name: siteConfig.seo.siteName,
+    description: siteConfig.seo.description,
     url: url,
     author: {
       '@type': 'Person',
-      name: SITE_CONFIG.author,
+      name: siteConfig.author,
     },
     potentialAction: {
       '@type': 'SearchAction',
@@ -184,20 +188,24 @@ export function generateBreadcrumbStructuredData(
 // Blog Schema（ブログ一覧用）
 // ===========================================
 
-export function generateBlogStructuredData(url: string): BlogStructuredData {
+export async function generateBlogStructuredData(
+  url: string
+): Promise<BlogStructuredData> {
+  const siteConfig = await getSiteConfig();
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    name: `${SITE_CONFIG.seo.siteName} - ブログ`,
-    description: SITE_CONFIG.seo.description,
+    name: `${siteConfig.seo.siteName} - ブログ`,
+    description: siteConfig.seo.description,
     url: url,
     author: {
       '@type': 'Person',
-      name: SITE_CONFIG.author,
+      name: siteConfig.author,
     },
     publisher: {
       '@type': 'Organization',
-      name: SITE_CONFIG.seo.siteName,
+      name: siteConfig.seo.siteName,
     },
   };
 }

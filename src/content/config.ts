@@ -102,7 +102,81 @@ const pages = defineCollection({
   }),
 });
 
+// サイト設定用のスキーマ定義
+const site = defineCollection({
+  type: 'data',
+  schema: z.object({
+    // 基本情報
+    title: z.string(),
+    subtitle: z.string(),
+    url: z.string().url(),
+    locale: z.string(),
+    author: z.string(),
+
+    // SEO設定
+    seo: z.object({
+      description: z.string(),
+      homeDescription: z.string(),
+      defaultOgImage: z.string(),
+      titleSeparator: z.string(),
+      siteName: z.string(),
+    }),
+
+    // ナビゲーション
+    nav: z.object({
+      headerTitle: z.string(),
+    }),
+
+    // ページ表示設定
+    pages: z.object({
+      showAbout: z.boolean(),
+      showContact: z.boolean(),
+    }),
+
+    // RSS設定
+    rss: z.object({
+      title: z.string(),
+      description: z.string(),
+    }),
+
+    // ページネーション
+    pagination: z.object({
+      postsPerPage: z.number(),
+    }),
+
+    // Aboutページ
+    about: z.object({
+      description: z.string(),
+      greeting: z.string(),
+    }),
+
+    // フッター情報
+    footer: z.object({
+      siteName: z.string(),
+      description: z.string(),
+      extendedDescription: z.string(),
+      copyright: z.string(),
+    }),
+
+    // ソーシャルメディア
+    social: z.object({
+      github: z.object({
+        url: z.string().url(),
+        enabled: z.boolean(),
+      }),
+      twitter: z.object({
+        url: z.string().url(),
+        enabled: z.boolean(),
+      }),
+      rss: z.object({
+        enabled: z.boolean(),
+      }),
+    }),
+  }),
+});
+
 export const collections = {
   blog,
-  pages, // 新規追加
+  pages,
+  site, // サイト設定コレクション
 };

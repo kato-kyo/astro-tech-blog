@@ -2,10 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
-import { SITE_CONFIG } from '../config/site.ts';
+import { getSiteConfig, createPageTitle } from '../utils/site-config.ts';
+
+const siteConfig = await getSiteConfig();
+const pageTitle = await createPageTitle('お問い合わせ');
 
 // ページが無効化されている場合は404を返す
-if (!SITE_CONFIG.pages.showContact) {
+if (!siteConfig.pages.showContact) {
   return new Response(null, {
     status: 404,
     statusText: 'Not found',
@@ -16,11 +19,11 @@ const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout
-  title="お問い合わせ - Tech Blog"
-  description="Tech Blogへのお問い合わせページです。技術的な質問やご相談など、お気軽にお問い合わせください。"
+  title={pageTitle}
+  description={`${siteConfig.seo.siteName}へのお問い合わせページです。技術的な質問やご相談など、お気軽にお問い合わせください。`}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -277,6 +280,6 @@ const currentPath = Astro.url.pathname;
       </div>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

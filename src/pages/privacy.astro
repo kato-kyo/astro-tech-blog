@@ -2,16 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
+import { getSiteConfig, createPageTitle } from '../utils/site-config.ts';
 
+const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
+const pageTitle = await createPageTitle('プライバシーポリシー');
 ---
 
 <BaseLayout
-  title="プライバシーポリシー - Tech Blog"
-  description="Tech Blogのプライバシーポリシーです。個人情報の取り扱いについて説明しています。"
+  title={pageTitle}
+  description={`${siteConfig.seo.siteName}のプライバシーポリシーです。個人情報の取り扱いについて説明しています。`}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -23,8 +26,9 @@ const currentPath = Astro.url.pathname;
           </p>
 
           <p>
-            Tech
-            Blog（以下「当サイト」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めています。
+            {
+              siteConfig.seo.siteName
+            }（以下「当サイト」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めています。
             本プライバシーポリシーでは、当サイトにおける個人情報の取り扱いについて説明します。
           </p>
 
@@ -153,6 +157,6 @@ const currentPath = Astro.url.pathname;
       </div>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

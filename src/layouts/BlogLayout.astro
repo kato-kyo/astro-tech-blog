@@ -14,6 +14,7 @@ import {
   generateBreadcrumbStructuredData,
   toJsonLd,
 } from '../utils/structured-data';
+import { getSiteConfig } from '../utils/site-config.ts';
 
 export interface Props {
   post: CollectionEntry<'blog'>;
@@ -45,6 +46,7 @@ const formattedUpdatedDate = updatedDate
   : null;
 
 const currentPath = Astro.url.pathname;
+const siteConfig = await getSiteConfig();
 
 // 構造化データ生成
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
@@ -68,7 +70,7 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
   structuredData={[structuredDataJson, breadcrumbJson]}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       {/* フローティング目次ボタン */}
@@ -313,6 +315,6 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
       </article>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>
