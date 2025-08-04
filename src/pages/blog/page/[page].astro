@@ -63,8 +63,8 @@ const categories = [
 // SEO用のメタデータ
 const seoTitle =
   currentPage === 1
-    ? 'ブログ記事一覧 - Tech Blog'
-    : `ブログ記事一覧 (${currentPage}ページ目) - Tech Blog`;
+    ? await createPageTitle('ブログ記事一覧')
+    : `ブログ記事一覧 (${currentPage}ページ目)`;
 
 const seoDescription =
   currentPage === 1

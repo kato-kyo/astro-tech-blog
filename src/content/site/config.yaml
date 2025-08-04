@@ -81,8 +81,14 @@ footer:
   copyright: Tech Blog. All rights reserved.
 
 # ===========================================
-# ソーシャルメディア（将来用）
+# ソーシャルメディア
 # ===========================================
 social:
-  twitter: '@yourusername'
-  github: https://github.com/yourusername
+  github:
+    url: https://github.com/yourusername
+    enabled: true
+  twitter:
+    url: https://twitter.com/yourusername
+    enabled: true
+  rss:
+    enabled: true

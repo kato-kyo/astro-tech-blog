@@ -160,8 +160,17 @@ const site = defineCollection({
 
     // ソーシャルメディア
     social: z.object({
-      twitter: z.string(),
-      github: z.string().url(),
+      github: z.object({
+        url: z.string().url(),
+        enabled: z.boolean(),
+      }),
+      twitter: z.object({
+        url: z.string().url(),
+        enabled: z.boolean(),
+      }),
+      rss: z.object({
+        enabled: z.boolean(),
+      }),
     }),
   }),
 });

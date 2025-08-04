@@ -11,6 +11,19 @@ interface SiteConfig {
     showAbout: boolean;
     showContact: boolean;
   };
+  social: {
+    github: {
+      url: string;
+      enabled: boolean;
+    };
+    twitter: {
+      url: string;
+      enabled: boolean;
+    };
+    rss: {
+      enabled: boolean;
+    };
+  };
 }
 
 interface FooterProps {
@@ -58,23 +71,36 @@ const RSSIcon = () => (
   </svg>
 );
 
-const socialLinks: SocialLink[] = [
-  {
-    href: 'https://github.com',
-    label: 'GitHub',
-    IconComponent: GitHubIcon,
-  },
-  {
-    href: 'https://twitter.com',
-    label: 'Twitter',
-    IconComponent: TwitterIcon,
-  },
-  {
-    href: '/rss.xml',
-    label: 'RSS',
-    IconComponent: RSSIcon,
-  },
-];
+// 動的にソーシャルリンクを生成する関数
+const getSocialLinks = (siteConfig: SiteConfig): SocialLink[] => {
+  const links: SocialLink[] = [];
+
+  if (siteConfig.social.github.enabled) {
+    links.push({
+      href: siteConfig.social.github.url,
+      label: 'GitHub',
+      IconComponent: GitHubIcon,
+    });
+  }
+
+  if (siteConfig.social.twitter.enabled) {
+    links.push({
+      href: siteConfig.social.twitter.url,
+      label: 'Twitter',
+      IconComponent: TwitterIcon,
+    });
+  }
+
+  if (siteConfig.social.rss.enabled) {
+    links.push({
+      href: '/rss.xml',
+      label: 'RSS',
+      IconComponent: RSSIcon,
+    });
+  }
+
+  return links;
+};
 
 export default function Footer({ className = '', siteConfig }: FooterProps) {
   const currentYear = new Date().getFullYear();
@@ -89,6 +115,9 @@ export default function Footer({ className = '', siteConfig }: FooterProps) {
     }
     return true;
   });
+
+  // 設定値に基づいてソーシャルリンクを動的生成
+  const socialLinks = getSocialLinks(siteConfig);
 
   return (
     <footer
