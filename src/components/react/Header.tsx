@@ -3,15 +3,25 @@ import Navigation from './Navigation';
 import ThemeToggle from './ThemeToggle';
 import MobileMenu from './MobileMenu';
 import SearchBox from './SearchBox';
-import { SITE_CONFIG } from '../../config/site';
 
 interface NavItem {
   href: string;
   label: string;
 }
 
+interface SiteConfig {
+  nav: {
+    headerTitle: string;
+  };
+  pages: {
+    showAbout: boolean;
+    showContact: boolean;
+  };
+}
+
 interface HeaderProps {
   currentPath: string;
+  siteConfig: SiteConfig;
 }
 
 const allNavItems: NavItem[] = [
@@ -22,18 +32,17 @@ const allNavItems: NavItem[] = [
   { href: '/contact/', label: 'お問い合わせ' },
 ];
 
-// 設定値に基づいてナビゲーションアイテムをフィルタリング
-const navItems: NavItem[] = allNavItems.filter(item => {
-  if (item.href === '/about/' && !SITE_CONFIG.pages.showAbout) {
-    return false;
-  }
-  if (item.href === '/contact/' && !SITE_CONFIG.pages.showContact) {
-    return false;
-  }
-  return true;
-});
-
-export default function Header({ currentPath }: HeaderProps) {
+export default function Header({ currentPath, siteConfig }: HeaderProps) {
+  // 設定値に基づいてナビゲーションアイテムをフィルタリング
+  const navItems: NavItem[] = allNavItems.filter(item => {
+    if (item.href === '/about/' && !siteConfig.pages.showAbout) {
+      return false;
+    }
+    if (item.href === '/contact/' && !siteConfig.pages.showContact) {
+      return false;
+    }
+    return true;
+  });
   return (
     <header
       className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800"
@@ -46,7 +55,7 @@ export default function Header({ currentPath }: HeaderProps) {
             <a
               href="/"
               className="flex items-center gap-3 group"
-              aria-label={`${SITE_CONFIG.nav.headerTitle} - ホームページへ`}
+              aria-label={`${siteConfig.nav.headerTitle} - ホームページへ`}
             >
               <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
                 <svg
@@ -59,14 +68,14 @@ export default function Header({ currentPath }: HeaderProps) {
                 </svg>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                {SITE_CONFIG.nav.headerTitle}
+                {siteConfig.nav.headerTitle}
               </span>
             </a>
           </div>
 
           {/* Navigation - Desktop */}
           <div className="hidden md:block">
-            <Navigation currentPath={currentPath} />
+            <Navigation currentPath={currentPath} siteConfig={siteConfig} />
           </div>
 
           {/* Search Box - Desktop */}
@@ -77,7 +86,11 @@ export default function Header({ currentPath }: HeaderProps) {
           {/* Theme Toggle & Mobile Menu */}
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <MobileMenu navItems={navItems} currentPath={currentPath} />
+            <MobileMenu
+              navItems={navItems}
+              currentPath={currentPath}
+              siteConfig={siteConfig}
+            />
           </div>
         </div>
       </div>

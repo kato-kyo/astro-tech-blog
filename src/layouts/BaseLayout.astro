@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE_CONFIG } from '../config/site.ts';
+import { getSiteConfig } from '../utils/site-config.ts';
 import {
   generateWebSiteStructuredData,
   toJsonLd,
@@ -14,9 +14,11 @@ export interface Props {
   structuredData?: string[];
 }
 
+const siteConfig = await getSiteConfig();
+
 const {
-  title = SITE_CONFIG.seo.siteName,
-  description = SITE_CONFIG.seo.description,
+  title = siteConfig.seo.siteName,
+  description = siteConfig.seo.description,
   image,
   noindex = false,
   structuredData = [],
@@ -24,7 +26,7 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(
-  image ?? SITE_CONFIG.seo.defaultOgImage,
+  image ?? siteConfig.seo.defaultOgImage,
   Astro.url
 ).href;
 
@@ -74,7 +76,7 @@ const defaultStructuredData =
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={SITE_CONFIG.rss.title}
+      title={siteConfig.rss.title}
       href="/rss.xml"
     />
 
@@ -170,6 +172,6 @@ const defaultStructuredData =
   <body
     class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300"
   >
-    <slot />
+    <slot siteConfig={siteConfig} />
   </body>
 </html>

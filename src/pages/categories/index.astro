@@ -4,7 +4,9 @@ import Header from '../../components/react/Header.tsx';
 import Footer from '../../components/react/Footer.tsx';
 import CategoryGrid from '../../components/react/CategoryGrid.tsx';
 import { getBlogPosts } from '../../utils/content.ts';
+import { getSiteConfig } from '../../utils/site-config.ts';
 
+const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
 
 // 全記事を取得（環境に応じてドラフトを表示）
@@ -40,7 +42,7 @@ const sortedCategories = Object.entries(categoryStats)
   description="ブログで使用されているカテゴリの一覧ページです。興味のあるカテゴリから記事を探すことができます。"
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
@@ -67,6 +69,6 @@ const sortedCategories = Object.entries(categoryStats)
       </section>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

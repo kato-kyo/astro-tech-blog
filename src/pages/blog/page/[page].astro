@@ -6,6 +6,7 @@ import BlogCard from '../../../components/react/BlogCard.tsx';
 import Pagination from '../../../components/react/Pagination.tsx';
 
 import { getSortedBlogPosts } from '../../../utils/content.ts';
+import { getSiteConfig, createPageTitle } from '../../../utils/site-config.ts';
 import type { GetStaticPaths } from 'astro';
 import {
   generateBlogStructuredData,
@@ -51,6 +52,7 @@ interface Props {
 }
 
 const { posts, currentPage, totalPages, totalPosts, allPosts } = Astro.props;
+const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
 
 // カテゴリ一覧を取得
@@ -81,7 +83,7 @@ const structuredDataJson = toJsonLd(blogStructuredData);
   structuredData={[structuredDataJson]}
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <!-- Header Section -->
@@ -201,6 +203,6 @@ const structuredDataJson = toJsonLd(blogStructuredData);
       </section>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

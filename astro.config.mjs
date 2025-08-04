@@ -3,11 +3,20 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import pagefind from 'astro-pagefind';
 import react from '@astrojs/react';
-import { SITE_CONFIG } from './src/config/site.ts';
+import { readFileSync } from 'fs';
+import { load as yamlLoad } from 'js-yaml';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+// YAML設定を同期的に読み込み
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const configPath = join(__dirname, 'src/content/site/config.yaml');
+const siteConfig = yamlLoad(readFileSync(configPath, 'utf8'));
 
 // https://astro.build/config
 export default defineConfig({
-  site: SITE_CONFIG.url, // 設定ファイルから読み込み
+  site: siteConfig.url,
   build: {
     format: 'file',
   },
@@ -45,10 +54,10 @@ export default defineConfig({
         }
 
         // 設定で無効化されたページを除外
-        if (page.includes('/about') && !SITE_CONFIG.pages.showAbout) {
+        if (page.includes('/about') && !siteConfig.pages.showAbout) {
           return false;
         }
-        if (page.includes('/contact') && !SITE_CONFIG.pages.showContact) {
+        if (page.includes('/contact') && !siteConfig.pages.showContact) {
           return false;
         }
 

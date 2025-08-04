@@ -2,7 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
+import { getSiteConfig } from '../utils/site-config.ts';
 
+const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
 ---
 
@@ -11,7 +13,7 @@ const currentPath = Astro.url.pathname;
   description="Tech Blogのプライバシーポリシーです。個人情報の取り扱いについて説明しています。"
 >
   <div class="min-h-screen flex flex-col">
-    <Header currentPath={currentPath} client:load />
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
     <main class="flex-1">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -153,6 +155,6 @@ const currentPath = Astro.url.pathname;
       </div>
     </main>
 
-    <Footer />
+    <Footer siteConfig={siteConfig} />
   </div>
 </BaseLayout>

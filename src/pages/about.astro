@@ -4,10 +4,12 @@ import PageLayout from '../layouts/PageLayout.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/react/Header.tsx';
 import Footer from '../components/react/Footer.tsx';
-import { createPageTitle, SITE_CONFIG } from '../config/site.ts';
+import { getSiteConfig, createPageTitle } from '../utils/site-config.ts';
+
+const siteConfig = await getSiteConfig();
 
 // ページが無効化されている場合は404を返す
-if (!SITE_CONFIG.pages.showAbout) {
+if (!siteConfig.pages.showAbout) {
   return new Response(null, {
     status: 404,
     statusText: 'Not found',
@@ -42,11 +44,11 @@ const currentPath = Astro.url.pathname;
 {
   hasError ? (
     <BaseLayout
-      title={createPageTitle('About - エラー')}
+      title={await createPageTitle('About - エラー')}
       description="ページの読み込み中にエラーが発生しました"
     >
       <div class="min-h-screen flex flex-col">
-        <Header currentPath={currentPath} client:load />
+        <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
         <main class="flex-1">
           <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -66,7 +68,7 @@ const currentPath = Astro.url.pathname;
           </div>
         </main>
 
-        <Footer />
+        <Footer siteConfig={siteConfig} />
       </div>
     </BaseLayout>
   ) : aboutEntry && Content ? (
@@ -75,11 +77,11 @@ const currentPath = Astro.url.pathname;
     </PageLayout>
   ) : (
     <BaseLayout
-      title={createPageTitle('About - 読み込み中')}
+      title={await createPageTitle('About - 読み込み中')}
       description="ページを読み込み中です"
     >
       <div class="min-h-screen flex flex-col">
-        <Header currentPath={currentPath} client:load />
+        <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
 
         <main class="flex-1">
           <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -99,7 +101,7 @@ const currentPath = Astro.url.pathname;
           </div>
         </main>
 
-        <Footer />
+        <Footer siteConfig={siteConfig} />
       </div>
     </BaseLayout>
   )

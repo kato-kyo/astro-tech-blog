@@ -1,8 +1,21 @@
 import React from 'react';
-import { SITE_CONFIG } from '../../config/site';
+
+interface SiteConfig {
+  footer: {
+    siteName: string;
+    description: string;
+    extendedDescription: string;
+    copyright: string;
+  };
+  pages: {
+    showAbout: boolean;
+    showContact: boolean;
+  };
+}
 
 interface FooterProps {
   className?: string;
+  siteConfig: SiteConfig;
 }
 
 interface LinkItem {
@@ -22,17 +35,6 @@ const allQuickLinks: LinkItem[] = [
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'お問い合わせ' },
 ];
-
-// 設定値に基づいてクイックリンクをフィルタリング
-const quickLinks: LinkItem[] = allQuickLinks.filter(item => {
-  if (item.href === '/about/' && !SITE_CONFIG.pages.showAbout) {
-    return false;
-  }
-  if (item.href === '/contact/' && !SITE_CONFIG.pages.showContact) {
-    return false;
-  }
-  return true;
-});
 
 const GitHubIcon = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -74,8 +76,19 @@ const socialLinks: SocialLink[] = [
   },
 ];
 
-export default function Footer({ className = '' }: FooterProps) {
+export default function Footer({ className = '', siteConfig }: FooterProps) {
   const currentYear = new Date().getFullYear();
+
+  // 設定値に基づいてクイックリンクをフィルタリング
+  const quickLinks: LinkItem[] = allQuickLinks.filter(item => {
+    if (item.href === '/about/' && !siteConfig.pages.showAbout) {
+      return false;
+    }
+    if (item.href === '/contact/' && !siteConfig.pages.showContact) {
+      return false;
+    }
+    return true;
+  });
 
   return (
     <footer
@@ -96,12 +109,12 @@ export default function Footer({ className = '' }: FooterProps) {
                 </svg>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                {SITE_CONFIG.footer.siteName}
+                {siteConfig.footer.siteName}
               </span>
             </div>
             <p className="text-sm text-gray-600 dark:text-gray-400 max-w-md">
-              {SITE_CONFIG.footer.description}
-              {SITE_CONFIG.footer.extendedDescription}
+              {siteConfig.footer.description}
+              {siteConfig.footer.extendedDescription}
             </p>
           </div>
 
@@ -153,7 +166,7 @@ export default function Footer({ className = '' }: FooterProps) {
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              © {currentYear} {SITE_CONFIG.footer.copyright}
+              © {currentYear} {siteConfig.footer.copyright}
             </p>
             <div className="flex space-x-6 mt-4 sm:mt-0">
               <a
