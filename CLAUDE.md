@@ -31,7 +31,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Content Collections**: `src/content/blog/`でMarkdown記事を管理
 
 ### ディレクトリ構造の重要なポイント
-- `src/components/react/` - 全てのReactコンポーネント（8個）
+- `src/components/react/` - 全てのReactコンポーネント（17個）
 - `src/content/blog/` - ブログ記事のMarkdownファイル
 - `src/layouts/` - ページレイアウト（BaseLayout、BlogLayout）
 - `src/pages/` - ルーティング（Astroファイルベースルーティング）
