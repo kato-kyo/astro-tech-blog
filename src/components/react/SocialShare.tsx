@@ -40,6 +40,7 @@ export default function SocialShare({
         textArea.style.top = '-9999px';
         document.body.appendChild(textArea);
         textArea.select();
+        // execCommand は非推奨だが古いブラウザ向けフォールバックとして必要
         const ok = document.execCommand('copy');
         document.body.removeChild(textArea);
         if (!ok) {

@@ -3,6 +3,7 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import astroEslintPlugin from 'eslint-plugin-astro';
 import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
@@ -40,6 +41,7 @@ export default [
     plugins: {
       '@typescript-eslint': typescriptEslint,
       react: reactPlugin,
+      'react-hooks': reactHooksPlugin,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'error',
@@ -49,6 +51,8 @@ export default [
       'react/jsx-uses-vars': 'error',
       'react/prop-types': 'off', // TypeScriptを使用しているため無効化
       'react/react-in-jsx-scope': 'off', // React 17+では不要
+      'react-hooks/rules-of-hooks': 'error', // Hooksのルールを強制
+      'react-hooks/exhaustive-deps': 'warn', // useEffectなどの依存配列をチェック
     },
   },
 
@@ -81,14 +85,6 @@ export default [
 
   // 除外設定
   {
-    ignores: [
-      'dist/',
-      'node_modules/',
-      '.astro/',
-      'public/',
-      'src/content/',
-      '*.config.js',
-      '*.config.mjs',
-    ],
+    ignores: ['dist/', 'node_modules/', '.astro/', 'public/', 'src/content/'],
   },
 ];
