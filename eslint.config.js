@@ -1,14 +1,9 @@
 import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import astroEslintPlugin from 'eslint-plugin-astro';
 import reactPlugin from 'eslint-plugin-react';
 import eslintConfigPrettier from 'eslint-config-prettier';
-
-const compat = new FlatCompat({
-  baseDirectory: process.cwd(),
-});
 
 export default [
   js.configs.recommended,
@@ -91,6 +86,7 @@ export default [
       'node_modules/',
       '.astro/',
       'public/',
+      'src/content/',
       '*.config.js',
       '*.config.mjs',
     ],

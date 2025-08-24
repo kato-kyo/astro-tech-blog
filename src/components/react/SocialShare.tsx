@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   TwitterShareButton,
   FacebookShareButton,
@@ -28,15 +27,19 @@ export default function SocialShare({
 }: SocialShareProps) {
   const copyToClipboard = async () => {
     try {
-      if (window.navigator?.clipboard) {
+      // Modern Clipboard APIを使用
+      if (window.navigator?.clipboard && window.isSecureContext) {
         await window.navigator.clipboard.writeText(url);
       } else {
-        // フォールバック: 古いブラウザ対応
+        // フォールバック: テキストエリアを使用
         const textArea = document.createElement('textarea');
         textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
         document.body.appendChild(textArea);
+        textArea.focus();
         textArea.select();
-        document.execCommand('copy');
         document.body.removeChild(textArea);
       }
     } catch {

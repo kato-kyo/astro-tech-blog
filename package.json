@@ -8,10 +8,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.astro --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" --ignore-pattern \"src/content/\"",
+    "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" --ignore-pattern \"src/content/\" --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" \"tsconfig.json\" --ignore-path .prettierignore",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" \"tsconfig.json\" --ignore-path .prettierignore",
     "check": "npm run lint && npm run format:check"
   },
   "dependencies": {

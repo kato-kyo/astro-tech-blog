@@ -50,7 +50,10 @@ const siteConfig = await getSiteConfig();
 
 // 構造化データ生成
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
-const articleStructuredData = generateArticleStructuredData(post, canonicalURL);
+const articleStructuredData = await generateArticleStructuredData(
+  post,
+  canonicalURL
+);
 
 // パンくずナビ用の構造化データ
 const breadcrumbData = generateBreadcrumbStructuredData([
