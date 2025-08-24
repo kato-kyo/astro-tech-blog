@@ -39,12 +39,17 @@ export default function SocialShare({
         textArea.style.left = '-9999px';
         textArea.style.top = '-9999px';
         document.body.appendChild(textArea);
-        textArea.select();
-        // execCommand は非推奨だが古いブラウザ向けフォールバックとして必要
-        const ok = document.execCommand('copy');
-        document.body.removeChild(textArea);
-        if (!ok) {
-          throw new Error('execCommand copy failed');
+        try {
+          textArea.select();
+          // iOS Safari対応: 明示的な選択範囲設定
+          textArea.setSelectionRange(0, textArea.value.length);
+          // execCommand は非推奨だが古いブラウザ向けフォールバックとして必要
+          const ok = document.execCommand('copy');
+          if (!ok) {
+            throw new Error('execCommand copy failed');
+          }
+        } finally {
+          document.body.removeChild(textArea);
         }
       }
     } catch {
