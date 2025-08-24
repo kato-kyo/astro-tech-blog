@@ -21,13 +21,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const sortedPosts = await getSortedBlogPosts();
 
   // 総ページ数を計算
-  const totalPages = Math.ceil(sortedPosts.length / 12);
+  const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
 
   // 各ページのパラメータとPropsを生成
   return Array.from({ length: totalPages }, (_, i) => {
     const currentPage = i + 1;
-    const start = i * 12;
-    const end = start + 12;
+    const start = i * POSTS_PER_PAGE;
+    const end = start + POSTS_PER_PAGE;
     const pagePosts = sortedPosts.slice(start, end);
 
     return {

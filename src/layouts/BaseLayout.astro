@@ -24,7 +24,7 @@ const {
   structuredData = [],
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
 const socialImageURL = new URL(
   image ?? siteConfig.seo.defaultOgImage,
   Astro.url
@@ -32,7 +32,7 @@ const socialImageURL = new URL(
 
 // WebSite構造化データ生成（ページ固有の構造化データがない場合）
 const websiteStructuredData = await generateWebSiteStructuredData(
-  Astro.site!.href
+  Astro.site?.href ?? new URL('/', Astro.url).href
 );
 const defaultStructuredData =
   structuredData.length > 0
@@ -44,7 +44,6 @@ const defaultStructuredData =
 <html lang="ja" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
@@ -59,14 +58,14 @@ const defaultStructuredData =
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={socialImageURL} />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={socialImageURL} />

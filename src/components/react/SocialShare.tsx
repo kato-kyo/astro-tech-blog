@@ -31,16 +31,20 @@ export default function SocialShare({
       if (window.navigator?.clipboard && window.isSecureContext) {
         await window.navigator.clipboard.writeText(url);
       } else {
-        // フォールバック: テキストエリアを使用
+        // フォールバック: テキストエリア + execCommand('copy') を使用
         const textArea = document.createElement('textarea');
         textArea.value = url;
+        textArea.setAttribute('readonly', '');
         textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
         document.body.appendChild(textArea);
-        textArea.focus();
         textArea.select();
+        const ok = document.execCommand('copy');
         document.body.removeChild(textArea);
+        if (!ok) {
+          throw new Error('execCommand copy failed');
+        }
       }
     } catch {
       // URLのコピーに失敗した場合は何もしない
@@ -144,7 +148,7 @@ export default function SocialShare({
           />
         </button>
         <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-          Copy
+          コピー
         </span>
       </div>
     </div>
