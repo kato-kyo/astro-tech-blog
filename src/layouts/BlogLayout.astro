@@ -83,9 +83,15 @@ const breadcrumbJson = toJsonLd(breadcrumbData);
         )
       }
 
-      <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+        <!-- Warm gradient behind article header -->
+        <div
+          class="absolute top-0 left-0 right-0 h-72 bg-gradient-to-b from-primary-50/40 to-transparent dark:from-primary-950/10 dark:to-transparent pointer-events-none"
+        >
+        </div>
+
         <!-- Hero Section -->
-        <header class="mb-8 lg:mb-12">
+        <header class="mb-8 lg:mb-12 relative">
           <!-- Breadcrumb -->
           <nav class="flex justify-center mb-6" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">

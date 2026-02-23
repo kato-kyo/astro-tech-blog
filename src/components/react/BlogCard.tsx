@@ -20,7 +20,7 @@ export default function BlogCard({ post, className = '' }: BlogCardProps) {
 
   return (
     <article
-      className={`group relative bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 overflow-hidden ${className}`}
+      className={`group relative bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-[0_8px_30px_-12px_rgba(237,123,32,0.15)] dark:hover:shadow-[0_8px_30px_-12px_rgba(237,123,32,0.1)] dark:ring-1 dark:ring-gray-700/50 hover:-translate-y-0.5 transition-all duration-300 overflow-hidden ${className}`}
       aria-labelledby={`blog-title-${slug}`}
       aria-describedby={`blog-meta-${slug}`}
     >
