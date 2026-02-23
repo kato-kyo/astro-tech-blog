@@ -274,6 +274,7 @@ export default function SearchBox({
           aria-describedby="search-help"
           aria-expanded={isOpen && results.length > 0}
           aria-haspopup="listbox"
+          aria-controls="search-listbox"
           aria-activedescendant={
             selectedIndex >= 0 && results.length > 0
               ? `search-result-${selectedIndex}`
@@ -326,7 +327,6 @@ export default function SearchBox({
       {isOpen && (
         <div
           className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"
-          role="region"
           aria-live="polite"
           aria-label="検索結果"
         >
@@ -339,7 +339,7 @@ export default function SearchBox({
               検索中...
             </div>
           ) : results.length > 0 ? (
-            <ul role="listbox" aria-label="検索結果">
+            <ul id="search-listbox" role="listbox" aria-label="検索結果">
               {results.map((result, index) => (
                 <li
                   key={result.id}
