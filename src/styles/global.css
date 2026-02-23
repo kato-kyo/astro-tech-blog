@@ -7,6 +7,17 @@ html {
   scroll-padding-top: 5rem; /* 80px - header height + margin */
 }
 
+/* Base transitions on interactive elements */
+@layer base {
+  a,
+  button {
+    transition-property: color, background-color, border-color, box-shadow,
+      transform, opacity;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
 /* Custom Components */
 @layer components {
   .line-clamp-2 {

@@ -21,7 +21,7 @@ export default function MobileTableOfContents({ headings }: Props) {
       {/* フローティングボタン */}
       <button
         onClick={toggleToc}
-        className="fixed top-20 right-4 z-40 bg-gray-600/90 hover:bg-gray-700 text-white px-3 py-2 rounded-md shadow-md transition-all duration-200 backdrop-blur-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400"
+        className="fixed top-20 right-4 z-40 bg-gray-50/95 dark:bg-gray-900/95 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:border-primary-300 dark:hover:border-primary-700 px-3 py-1.5 rounded-full shadow-sm transition-all duration-200 backdrop-blur-sm text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
         aria-label={isOpen ? '目次を閉じる' : '目次を開く'}
         aria-expanded={isOpen}
         aria-controls="mobile-toc-panel"

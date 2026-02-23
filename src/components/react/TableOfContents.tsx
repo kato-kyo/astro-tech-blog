@@ -62,17 +62,20 @@ export default function TableOfContents({
 
   return (
     <nav
-      className={`toc bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700 ${className}`}
+      className={`toc ${className}`}
       aria-label="記事の目次"
       role="navigation"
     >
-      <h3
-        className="text-sm font-semibold text-gray-900 dark:text-white mb-4 uppercase tracking-wider"
+      <p
+        className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3"
         id="toc-heading"
       >
         目次
-      </h3>
-      <ul className="space-y-2 text-sm" aria-labelledby="toc-heading">
+      </p>
+      <ul
+        className="border-l border-gray-200 dark:border-gray-700 space-y-0.5 text-sm"
+        aria-labelledby="toc-heading"
+      >
         {tocHeadings.map(heading => (
           <li key={heading.slug}>
             <button
@@ -80,24 +83,15 @@ export default function TableOfContents({
               aria-label={`${heading.text}の章へ移動`}
               aria-current={activeId === heading.slug ? 'location' : undefined}
               className={`
-                block w-full text-left transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-primary-400 rounded-sm
+                block w-full text-left py-1 pl-4 border-l-2 -ml-px transition-colors duration-150 focus:outline-none
                 ${
                   activeId === heading.slug
-                    ? 'text-primary-600 dark:text-primary-400 font-medium'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
+                    ? 'border-l-primary-500 text-primary-600 dark:text-primary-400 font-medium'
+                    : 'border-l-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:border-l-gray-300 dark:hover:border-l-gray-600'
                 }
-                ${heading.depth === 2 ? 'font-medium' : ''}
-                ${heading.depth === 3 ? 'ml-4 text-xs' : ''}
+                ${heading.depth === 3 ? 'pl-7 text-xs' : ''}
               `}
             >
-              <span
-                className={`inline-block w-2 h-2 rounded-full mr-2 transition-colors duration-200 ${
-                  activeId === heading.slug
-                    ? 'bg-primary-600 dark:bg-primary-400'
-                    : 'bg-gray-300 dark:bg-gray-600'
-                }`}
-                aria-hidden="true"
-              />
               {heading.text}
             </button>
           </li>

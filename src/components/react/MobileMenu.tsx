@@ -92,14 +92,14 @@ export default function MobileMenu({
       <div
         ref={menuRef}
         id="mobile-menu"
-        className={`absolute top-full left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-50 transition-all duration-200 ease-in-out ${
+        className={`absolute top-full left-0 right-0 bg-gray-50 dark:bg-gray-900 border-t border-gray-200/60 dark:border-gray-800 shadow-lg z-50 transition-all duration-200 ease-in-out ${
           isOpen
             ? 'opacity-100 translate-y-0'
             : 'opacity-0 -translate-y-2 pointer-events-none'
         }`}
       >
         {/* Search Box for Mobile */}
-        <div className="px-4 pt-3 pb-2 border-b border-gray-200 dark:border-gray-700">
+        <div className="px-4 pt-3 pb-2 border-b border-gray-200/60 dark:border-gray-800">
           <SearchBox compact placeholder="記事を検索..." />
         </div>
 
@@ -113,10 +113,10 @@ export default function MobileMenu({
               href={item.href}
               onClick={() => setIsOpen(false)}
               aria-current={isActiveLink(item.href) ? 'page' : undefined}
-              className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`block px-3 py-2 text-sm font-medium transition-colors ${
                 isActiveLink(item.href)
-                  ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
-                  : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                  ? 'text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
               }`}
             >
               {item.label}

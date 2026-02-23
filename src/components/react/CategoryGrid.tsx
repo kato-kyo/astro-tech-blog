@@ -43,39 +43,41 @@ export default function CategoryGrid({ initialCategories }: CategoryGridProps) {
       {/* カテゴリ一覧表示 */}
       {filteredCategories.length > 0 ? (
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          role="grid"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+          role="list"
           aria-label="カテゴリ一覧"
         >
           {filteredCategories.map(({ category, count }) => (
             <a
               key={category}
               href={`/categories/${sanitizeCategory(category)}/`}
-              role="gridcell"
+              role="listitem"
               aria-label={`カテゴリ「${category}」の記事${count}件を表示`}
-              className="group block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900"
+              className="group flex items-center gap-4 pl-4 py-4 border-l-2 border-l-gray-200 dark:border-l-gray-700 hover:border-l-primary-500 dark:hover:border-l-primary-500 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 rounded-r-sm"
             >
-              <div className="text-center">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-                  <svg
-                    className="w-6 h-6 text-blue-600 dark:text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                  >
-                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                  </svg>
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
+              <div className="flex-1 min-w-0">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                   {category}
                 </h2>
                 <p
-                  className="text-sm text-gray-500 dark:text-gray-400"
+                  className="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
                   aria-label={`このカテゴリには${count}件の記事があります`}
                 >
                   {count} 記事
                 </p>
               </div>
+              <svg
+                className="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:text-primary-400 dark:group-hover:text-primary-500 transition-colors flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
             </a>
           ))}
         </div>

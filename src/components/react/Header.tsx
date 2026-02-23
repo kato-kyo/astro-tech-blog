@@ -44,7 +44,7 @@ export default function Header({ currentPath, siteConfig }: HeaderProps) {
   });
   return (
     <header
-      className="sticky top-0 z-50 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800"
+      className="sticky top-0 z-50 bg-gray-50/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-[0_1px_3px_0_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_0_rgba(0,0,0,0.4)]"
       role="banner"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,15 +56,10 @@ export default function Header({ currentPath, siteConfig }: HeaderProps) {
               className="flex items-center gap-3 group"
               aria-label={`${siteConfig.nav.headerTitle} - ホームページへ`}
             >
-              <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
-                <svg
-                  className="w-5 h-5 text-white"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
-                >
-                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+              <div className="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center transform group-hover:scale-105 transition-transform">
+                <span className="text-white font-mono font-bold text-sm leading-none">
+                  K
+                </span>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                 {siteConfig.nav.headerTitle}

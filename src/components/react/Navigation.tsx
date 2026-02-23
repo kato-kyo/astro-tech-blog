@@ -50,11 +50,11 @@ export default function Navigation({
 
   const getLinkClasses = (href: string) => {
     const baseClasses =
-      'transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900';
+      'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900';
     const activeClasses =
-      'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20';
+      'text-primary-600 dark:text-primary-400 font-semibold';
     const inactiveClasses =
-      'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800';
+      'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100';
 
     if (mobile) {
       return `block px-3 py-2 rounded-md text-sm font-medium ${baseClasses} ${
@@ -62,7 +62,7 @@ export default function Navigation({
       }`;
     }
 
-    return `px-3 py-2 text-sm font-medium rounded-md ${baseClasses} ${
+    return `relative px-1 py-2 text-sm ${baseClasses} ${
       isActiveLink(href) ? activeClasses : inactiveClasses
     }`;
   };
@@ -89,7 +89,7 @@ export default function Navigation({
 
   return (
     <nav
-      className={`flex items-center justify-center space-x-8 ${className}`}
+      className={`flex items-center justify-center gap-6 ${className}`}
       aria-label="メインナビゲーション"
     >
       {navItems.map(item => (
@@ -100,6 +100,9 @@ export default function Navigation({
           aria-current={isActiveLink(item.href) ? 'page' : undefined}
         >
           {item.label}
+          {isActiveLink(item.href) && (
+            <span className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary-500 rounded-full" />
+          )}
         </a>
       ))}
     </nav>

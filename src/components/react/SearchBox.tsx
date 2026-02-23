@@ -285,7 +285,7 @@ export default function SearchBox({
             rounded-lg bg-white dark:bg-gray-800 
             text-gray-900 dark:text-gray-100 
             placeholder-gray-500 dark:placeholder-gray-400
-            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+            focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
             transition-colors duration-200
             ${compact ? 'text-sm py-1.5' : ''}
           `}
@@ -300,7 +300,7 @@ export default function SearchBox({
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
           {isLoading ? (
             <div
-              className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"
+              className="animate-spin h-4 w-4 border-2 border-primary-500 border-t-transparent rounded-full"
               aria-label="検索中"
             ></div>
           ) : (
@@ -381,7 +381,7 @@ export default function SearchBox({
                     className={`text-xs mt-1 ${
                       index === selectedIndex
                         ? 'text-primary-600 dark:text-primary-400'
-                        : 'text-blue-600 dark:text-blue-400'
+                        : 'text-accent-600 dark:text-accent-400'
                     }`}
                   >
                     {result.url}

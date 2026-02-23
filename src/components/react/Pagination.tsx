@@ -65,18 +65,18 @@ export default function Pagination({
 
   return (
     <nav
-      className={`flex items-center justify-center space-x-1 ${className}`}
+      className={`flex items-center justify-center gap-1 ${className}`}
       aria-label="ページネーション"
     >
       {/* 前のページボタン */}
       {prevUrl ? (
         <a
           href={prevUrl}
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:z-10 dark:focus:ring-primary-400"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus:outline-none"
           aria-label="前のページ"
         >
           <svg
-            className="w-4 h-4 mr-1"
+            className="w-4 h-4"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -90,9 +90,9 @@ export default function Pagination({
           <span className="hidden sm:inline">前へ</span>
         </a>
       ) : (
-        <span className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-l-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-300 dark:text-gray-600 cursor-default">
           <svg
-            className="w-4 h-4 mr-1"
+            className="w-4 h-4"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -108,15 +108,15 @@ export default function Pagination({
       )}
 
       {/* ページ番号 */}
-      <div className="flex">
+      <div className="flex items-center gap-1">
         {pageNumbers.map((pageNum, index) => {
           if (pageNum === '...') {
             return (
               <span
                 key={`dots-${index}`}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300"
+                className="px-2 py-1.5 text-sm text-gray-400 dark:text-gray-500"
               >
-                ...
+                …
               </span>
             );
           }
@@ -127,16 +127,17 @@ export default function Pagination({
           return isCurrentPage ? (
             <span
               key={pageNum}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-primary-600 border border-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:border-primary-500"
+              className="relative flex flex-col items-center px-3 py-1.5 text-sm font-semibold text-gray-900 dark:text-white"
               aria-current="page"
             >
               {pageNum}
+              <span className="absolute -bottom-0 w-1 h-1 bg-primary-500 rounded-full" />
             </span>
           ) : (
             <a
               key={pageNum}
               href={pageUrl}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:z-10 dark:focus:ring-primary-400"
+              className="px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus:outline-none"
               aria-label={`ページ ${pageNum} へ`}
             >
               {pageNum}
@@ -149,12 +150,12 @@ export default function Pagination({
       {nextUrl ? (
         <a
           href={nextUrl}
-          className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:z-10 dark:focus:ring-primary-400"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors focus:outline-none"
           aria-label="次のページ"
         >
           <span className="hidden sm:inline">次へ</span>
           <svg
-            className="w-4 h-4 ml-1"
+            className="w-4 h-4"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -167,10 +168,10 @@ export default function Pagination({
           </svg>
         </a>
       ) : (
-        <span className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-r-md dark:bg-gray-700 dark:border-gray-600 dark:text-gray-500">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-300 dark:text-gray-600 cursor-default">
           <span className="hidden sm:inline">次へ</span>
           <svg
-            className="w-4 h-4 ml-1"
+            className="w-4 h-4"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"

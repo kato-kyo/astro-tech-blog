@@ -87,17 +87,17 @@ const formatPeriod = (startDate: Date, endDate?: Date, current?: boolean) => {
               <div class="relative">
                 {/* タイムライン */}
                 <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-300 dark:bg-gray-600">
-                  <div class="absolute top-2 -left-2 w-5 h-5 bg-blue-500 rounded-full border-2 border-white dark:border-gray-800" />
+                  <div class="absolute top-2 -left-2 w-5 h-5 bg-primary-500 rounded-full border-2 border-white dark:border-gray-900" />
                 </div>
 
                 {/* コンテンツ */}
-                <div class="ml-8 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="ml-8 bg-white dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700/50 p-6">
                   <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                     <div class="mb-2 md:mb-0">
                       <h4 class="text-xl font-semibold text-gray-900 dark:text-white">
                         {exp.title}
                       </h4>
-                      <p class="text-lg text-blue-600 dark:text-blue-400">
+                      <p class="text-lg text-primary-600 dark:text-primary-400">
                         {exp.organization}
                       </p>
                       {exp.location && (
@@ -127,7 +127,7 @@ const formatPeriod = (startDate: Date, endDate?: Date, current?: boolean) => {
                       </h5>
                       <div class="flex flex-wrap gap-2">
                         {exp.technologies.map(tech => (
-                          <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full">
+                          <span class="px-3 py-1 bg-primary-100 dark:bg-primary-950/50 text-primary-800 dark:text-primary-200 text-sm rounded-full">
                             {tech}
                           </span>
                         ))}

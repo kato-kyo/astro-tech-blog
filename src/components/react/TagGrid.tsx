@@ -37,75 +37,73 @@ export default function TagGrid({ initialTags }: TagGridProps) {
       />
 
       {/* タグ一覧表示 */}
-      {filteredTags.length > 0 ? (
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-          role="grid"
-          aria-label="タグ一覧"
-        >
-          {filteredTags.map(({ tag, count }) => (
-            <a
-              key={tag}
-              href={`/tags/${sanitizeTag(tag)}/`}
-              role="gridcell"
-              aria-label={`タグ「${tag}」の記事${count}件を表示`}
-              className="group block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-primary-400 dark:focus:ring-offset-gray-900"
-            >
-              <div className="text-center">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-                  <svg
-                    className="w-6 h-6 text-blue-600 dark:text-blue-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100 2 1 1 0 000-2z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors mb-2">
-                  #{tag}
-                </h2>
-                <p
-                  className="text-sm text-gray-500 dark:text-gray-400"
-                  aria-label={`このタグには${count}件の記事があります`}
-                >
-                  {count} 記事
-                </p>
+      {filteredTags.length > 0
+        ? (() => {
+            const maxCount = Math.max(...filteredTags.map(t => t.count));
+            const minCount = Math.min(...filteredTags.map(t => t.count));
+            const getSize = (count: number) => {
+              if (maxCount === minCount) return 'base';
+              const ratio = (count - minCount) / (maxCount - minCount);
+              if (ratio >= 0.7) return 'lg';
+              if (ratio >= 0.35) return 'base';
+              return 'sm';
+            };
+            const sizeClass: Record<string, string> = {
+              sm: 'text-xs px-3 py-1.5',
+              base: 'text-sm px-4 py-1.5',
+              lg: 'text-base px-4 py-2',
+            };
+            return (
+              <div
+                className="flex flex-wrap gap-2"
+                role="list"
+                aria-label="タグ一覧"
+              >
+                {filteredTags.map(({ tag, count }) => {
+                  const size = getSize(count);
+                  return (
+                    <a
+                      key={tag}
+                      href={`/tags/${sanitizeTag(tag)}/`}
+                      role="listitem"
+                      aria-label={`タグ「${tag}」の記事${count}件を表示`}
+                      className={`inline-flex items-center gap-1.5 font-mono font-medium rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-primary-300 dark:hover:border-primary-700 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-950/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 ${sizeClass[size]}`}
+                    >
+                      <span>#{tag}</span>
+                      <span className="text-gray-400 dark:text-gray-500 text-xs font-normal">
+                        {count}
+                      </span>
+                    </a>
+                  );
+                })}
               </div>
-            </a>
-          ))}
-        </div>
-      ) : (
-        // 検索中でない場合のみ「タグがありません」メッセージを表示
-        !searchQuery && (
-          <div className="text-center py-12" role="status" aria-live="polite">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-              />
-            </svg>
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
-              タグがありません
-            </h3>
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              まだタグが作成されていません。
-            </p>
-          </div>
-        )
-      )}
+            );
+          })()
+        : // 検索中でない場合のみ「タグがありません」メッセージを表示
+          !searchQuery && (
+            <div className="text-center py-12" role="status" aria-live="polite">
+              <svg
+                className="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                />
+              </svg>
+              <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+                タグがありません
+              </h3>
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                まだタグが作成されていません。
+              </p>
+            </div>
+          )}
     </div>
   );
 }
