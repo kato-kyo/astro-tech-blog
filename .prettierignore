@@ -26,5 +26,8 @@ public/
 # Markdown files
 *.md 
 
+# コンテンツディレクトリ (content管理用)
+src/content/
+
 # serena mcp
 .serena/

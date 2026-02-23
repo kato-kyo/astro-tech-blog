@@ -38,7 +38,7 @@ const categories = [
 
 // Blog構造化データ生成
 const blogUrl = new URL('/blog/', Astro.site).href;
-const blogStructuredData = generateBlogStructuredData(blogUrl);
+const blogStructuredData = await generateBlogStructuredData(blogUrl);
 const structuredDataJson = toJsonLd(blogStructuredData);
 ---
 

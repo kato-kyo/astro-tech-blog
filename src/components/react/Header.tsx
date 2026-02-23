@@ -1,4 +1,3 @@
-import React from 'react';
 import Navigation from './Navigation';
 import ThemeToggle from './ThemeToggle';
 import MobileMenu from './MobileMenu';
@@ -86,11 +85,7 @@ export default function Header({ currentPath, siteConfig }: HeaderProps) {
           {/* Theme Toggle & Mobile Menu */}
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <MobileMenu
-              navItems={navItems}
-              currentPath={currentPath}
-              siteConfig={siteConfig}
-            />
+            <MobileMenu navItems={navItems} currentPath={currentPath} />
           </div>
         </div>
       </div>

@@ -8,11 +8,12 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.astro --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "check": "npm run lint && npm run format:check"
+    "lint": "eslint --cache --cache-location .eslintcache \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\"",
+    "lint:fix": "eslint --cache --cache-location .eslintcache \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" \"tsconfig.json\" --ignore-path .prettierignore",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,astro}\" \"astro.config.mjs\" \"tailwind.config.mjs\" \"eslint.config.js\" \"tsconfig.json\" --ignore-path .prettierignore",
+    "typecheck": "astro check",
+    "check": "npm run typecheck && npm run lint && npm run format:check"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -44,6 +45,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-astro": "^1.2.4",
     "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.8.3"

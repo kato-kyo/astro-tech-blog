@@ -13,21 +13,21 @@ import {
   toJsonLd,
 } from '../../../utils/structured-data';
 
-// 定数定義
-const POSTS_PER_PAGE = 12;
-
 export const getStaticPaths: GetStaticPaths = async () => {
+  // 定数定義
+  const POSTS_PER_PAGE = 12;
+
   // 記事を取得（環境に応じてドラフトを表示）
   const sortedPosts = await getSortedBlogPosts();
 
   // 総ページ数を計算
-  const totalPages = Math.ceil(sortedPosts.length / 12);
+  const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
 
   // 各ページのパラメータとPropsを生成
   return Array.from({ length: totalPages }, (_, i) => {
     const currentPage = i + 1;
-    const start = i * 12;
-    const end = start + 12;
+    const start = i * POSTS_PER_PAGE;
+    const end = start + POSTS_PER_PAGE;
     const pagePosts = sortedPosts.slice(start, end);
 
     return {
@@ -51,6 +51,8 @@ interface Props {
   allPosts: any[];
 }
 
+const POSTS_PER_PAGE = 12;
+
 const { posts, currentPage, totalPages, totalPosts, allPosts } = Astro.props;
 const siteConfig = await getSiteConfig();
 const currentPath = Astro.url.pathname;
@@ -73,7 +75,7 @@ const seoDescription =
 
 // Blog構造化データ生成
 const blogUrl = new URL('/blog/', Astro.site).href;
-const blogStructuredData = generateBlogStructuredData(blogUrl);
+const blogStructuredData = await generateBlogStructuredData(blogUrl);
 const structuredDataJson = toJsonLd(blogStructuredData);
 ---
 
