@@ -1,0 +1,60 @@
+---
+interface Props {
+  profile: {
+    name: string;
+    role: string;
+    location?: string;
+    avatar?: string;
+    bio: string;
+    greeting: string;
+  };
+}
+
+const { profile } = Astro.props;
+---
+
+<section class="bg-gray-900 text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center">
+      <!-- アバター画像 -->
+      {
+        profile.avatar && (
+          <div class="mb-8">
+            <img
+              src={profile.avatar}
+              alt={profile.name}
+              class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-lg"
+            />
+          </div>
+        )
+      }
+
+      <!-- 挨拶 -->
+      <p class="text-xl mb-4 font-light">
+        {profile.greeting}
+      </p>
+
+      <!-- 名前 -->
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">
+        {profile.name}
+      </h1>
+
+      <!-- 役職 -->
+      <p class="text-xl md:text-2xl font-light mb-4">
+        {profile.role}
+      </p>
+
+      <!-- 場所 -->
+      {
+        profile.location && (
+          <p class="text-lg mb-6 opacity-90">📍 {profile.location}</p>
+        )
+      }
+
+      <!-- 自己紹介 -->
+      <p class="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+        {profile.bio}
+      </p>
+    </div>
+  </div>
+</section>

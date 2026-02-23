@@ -1,0 +1,329 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/react/Header.tsx';
+import Footer from '../components/react/Footer.tsx';
+import TableOfContents from '../components/react/TableOfContents.tsx';
+import MobileTableOfContents from '../components/react/MobileTableOfContents.tsx';
+import SocialShare from '../components/react/SocialShare.tsx';
+import type { CollectionEntry } from 'astro:content';
+import { format } from 'date-fns';
+import { ja } from 'date-fns/locale';
+import readingTime from 'reading-time';
+import {
+  generateArticleStructuredData,
+  generateBreadcrumbStructuredData,
+  toJsonLd,
+} from '../utils/structured-data';
+import { getSiteConfig } from '../utils/site-config.ts';
+
+export interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  emoji,
+  tags,
+  category,
+  draft,
+} = post.data;
+
+// 開発環境でのみドラフトバッジを表示
+const showDraftBadge = import.meta.env.DEV && draft;
+
+// 記事の内容を取得して読了時間を計算
+const { Content, headings } = await post.render();
+const rawContent = post.body;
+const readTime = readingTime(rawContent);
+
+const formattedDate = format(pubDate, 'yyyy年MM月dd日', { locale: ja });
+const formattedUpdatedDate = updatedDate
+  ? format(updatedDate, 'yyyy年MM月dd日', { locale: ja })
+  : null;
+
+const currentPath = Astro.url.pathname;
+const siteConfig = await getSiteConfig();
+
+// 構造化データ生成
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const articleStructuredData = await generateArticleStructuredData(
+  post,
+  canonicalURL
+);
+
+// パンくずナビ用の構造化データ
+const breadcrumbData = generateBreadcrumbStructuredData([
+  { name: 'ホーム', url: Astro.site!.href },
+  { name: 'ブログ', url: new URL('/blog/', Astro.site).href },
+  { name: title, url: canonicalURL },
+]);
+
+const structuredDataJson = toJsonLd(articleStructuredData);
+const breadcrumbJson = toJsonLd(breadcrumbData);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={emoji}
+  structuredData={[structuredDataJson, breadcrumbJson]}
+>
+  <div class="min-h-screen flex flex-col">
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
+
+    <main class="flex-1">
+      {/* フローティング目次ボタン */}
+      {
+        headings && headings.length > 0 && (
+          <MobileTableOfContents headings={headings} client:load />
+        )
+      }
+
+      <article class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+        <!-- Warm gradient behind article header -->
+        <div
+          class="absolute top-0 left-0 right-0 h-72 bg-gradient-to-b from-primary-50/40 to-transparent dark:from-primary-950/10 dark:to-transparent pointer-events-none"
+        >
+        </div>
+
+        <!-- Hero Section -->
+        <header class="mb-8 lg:mb-12 relative">
+          <!-- Breadcrumb -->
+          <nav class="flex justify-center mb-6" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+              <li class="inline-flex items-center">
+                <a
+                  href="/"
+                  class="text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+                >
+                  ホーム
+                </a>
+              </li>
+              <li>
+                <div class="flex items-center">
+                  <svg
+                    class="w-4 h-4 text-gray-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                  <a
+                    href="/blog/"
+                    class="ml-1 text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 md:ml-2"
+                  >
+                    ブログ
+                  </a>
+                </div>
+              </li>
+              <li aria-current="page">
+                <div class="flex items-center">
+                  <svg
+                    class="w-4 h-4 text-gray-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                  <span
+                    class="ml-1 text-gray-700 dark:text-gray-300 md:ml-2 line-clamp-1"
+                    >{title}</span
+                  >
+                </div>
+              </li>
+            </ol>
+          </nav>
+
+          <div class="space-y-4">
+            <div
+              class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400"
+            >
+              <time
+                datetime={pubDate.toISOString()}
+                class="flex items-center gap-1"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                {formattedDate}
+              </time>
+
+              {
+                formattedUpdatedDate && (
+                  <span class="flex items-center gap-1">
+                    <svg
+                      class="w-4 h-4"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    更新: {formattedUpdatedDate}
+                  </span>
+                )
+              }
+
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                約{Math.ceil(readTime.minutes)}分で読めます
+              </span>
+
+              {
+                category && (
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                    {category}
+                  </span>
+                )
+              }
+            </div>
+
+            {
+              showDraftBadge && (
+                <div class="mb-3">
+                  <span class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 border border-yellow-300 dark:border-yellow-700">
+                    🚧 ドラフト
+                  </span>
+                </div>
+              )
+            }
+
+            <h1
+              class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-tight flex items-center gap-3"
+            >
+              {
+                emoji && (
+                  <span class="text-4xl" role="img" aria-label="記事のアイコン">
+                    {emoji}
+                  </span>
+                )
+              }
+              {title}
+            </h1>
+
+            <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+              {description}
+            </p>
+
+            {
+              tags && tags.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {tags.map(tag => (
+                    <a
+                      href={`/tags/${encodeURIComponent(tag)}/`}
+                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      #{tag}
+                    </a>
+                  ))}
+                </div>
+              )
+            }
+
+            <!-- Social Share - Top -->
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <SocialShare
+                url={canonicalURL}
+                title={title}
+                description={description}
+                client:load
+              />
+            </div>
+          </div>
+        </header>
+
+        <!-- Content with TOC -->
+        <div class="lg:grid lg:grid-cols-4 lg:gap-8">
+          <!-- Article Content -->
+          <div
+            class={`prose prose-lg dark:prose-invert max-w-none ${headings && headings.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}
+          >
+            <Content />
+          </div>
+
+          <!-- Table of Contents -->
+          {
+            headings && headings.length > 0 && (
+              <aside class="hidden lg:block lg:col-span-1">
+                <div class="sticky top-8">
+                  <TableOfContents headings={headings} client:load />
+                </div>
+              </aside>
+            )
+          }
+        </div>
+
+        <!-- Article Footer -->
+        <footer
+          class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
+        >
+          <!-- Social Share - Bottom -->
+          <div class="mb-8">
+            <SocialShare
+              url={canonicalURL}
+              title={title}
+              description={description}
+              client:load
+            />
+          </div>
+
+          <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+          >
+            <div class="flex flex-wrap gap-2">
+              {
+                tags &&
+                  tags.map(tag => (
+                    <a
+                      href={`/tags/${encodeURIComponent(tag)}/`}
+                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      #{tag}
+                    </a>
+                  ))
+              }
+            </div>
+
+            <div class="flex items-center gap-4">
+              <button
+                onclick="window.history.back()"
+                class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                    clip-rule="evenodd"></path>
+                </svg>
+                戻る
+              </button>
+            </div>
+          </div>
+        </footer>
+      </article>
+    </main>
+
+    <Footer siteConfig={siteConfig} />
+  </div>
+</BaseLayout>

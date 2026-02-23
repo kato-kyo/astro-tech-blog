@@ -1,0 +1,178 @@
+---
+import '../styles/global.css';
+import { getSiteConfig } from '../utils/site-config.ts';
+import {
+  generateWebSiteStructuredData,
+  toJsonLd,
+} from '../utils/structured-data';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  structuredData?: string[];
+}
+
+const siteConfig = await getSiteConfig();
+
+const {
+  title = siteConfig.seo.siteName,
+  description = siteConfig.seo.description,
+  image,
+  noindex = false,
+  structuredData = [],
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const socialImageURL = new URL(
+  image ?? siteConfig.seo.defaultOgImage,
+  Astro.url
+).href;
+
+// WebSite構造化データ生成（ページ固有の構造化データがない場合）
+const websiteStructuredData = await generateWebSiteStructuredData(
+  Astro.site?.href ?? new URL('/', Astro.url).href
+);
+const defaultStructuredData =
+  structuredData.length > 0
+    ? structuredData
+    : [toJsonLd(websiteStructuredData)];
+---
+
+<!doctype html>
+<html lang="ja" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={socialImageURL} />
+
+    <!-- Robots -->
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <!-- RSS Feed -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={siteConfig.rss.title}
+      href="/rss.xml"
+    />
+
+    <!-- Structured Data (JSON-LD) -->
+    {
+      defaultStructuredData.map(data => (
+        <script type="application/ld+json" set:html={data} is:inline />
+      ))
+    }
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Scripts -->
+    <script is:inline>
+      // 3状態テーマ管理（light/dark/system）
+      const getThemePreference = () => {
+        if (typeof localStorage !== 'undefined') {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'light' || stored === 'dark' || stored === 'system') {
+            return stored;
+          }
+        }
+        return 'system'; // デフォルトはシステム設定に従う
+      };
+
+      const getEffectiveTheme = preference => {
+        if (preference === 'system') {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+        return preference;
+      };
+
+      const applyTheme = theme => {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      };
+
+      // 初期テーマの適用
+      const preference = getThemePreference();
+      const effectiveTheme = getEffectiveTheme(preference);
+      applyTheme(effectiveTheme);
+
+      // システム設定変更の監視
+      if (typeof window !== 'undefined') {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const handleSystemThemeChange = e => {
+          const currentPreference = getThemePreference();
+          if (currentPreference === 'system') {
+            applyTheme(e.matches ? 'dark' : 'light');
+          }
+        };
+
+        mediaQuery.addEventListener('change', handleSystemThemeChange);
+
+        // DOM変更の監視とLocalStorage同期
+        if (typeof localStorage !== 'undefined') {
+          const observer = new MutationObserver(mutations => {
+            const classChanges = mutations.filter(
+              mutation =>
+                mutation.type === 'attributes' &&
+                mutation.attributeName === 'class'
+            );
+
+            if (classChanges.length > 0) {
+              // 手動変更の場合のみLocalStorageを更新
+              // system設定時の自動変更は除外
+              const isDark =
+                document.documentElement.classList.contains('dark');
+              const currentPreference = getThemePreference();
+
+              if (currentPreference !== 'system') {
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+              }
+            }
+          });
+
+          observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class'],
+          });
+        }
+      }
+    </script>
+  </head>
+  <body
+    class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased transition-colors duration-300"
+  >
+    <slot />
+  </body>
+</html>

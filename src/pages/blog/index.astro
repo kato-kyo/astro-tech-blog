@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/react/Header.tsx';
+import Footer from '../../components/react/Footer.tsx';
+import BlogCard from '../../components/react/BlogCard.tsx';
+import Pagination from '../../components/react/Pagination.tsx';
+import { createPageTitle, getSiteConfig } from '../../utils/site-config.ts';
+import { getSortedBlogPosts } from '../../utils/content.ts';
+import {
+  generateBlogStructuredData,
+  toJsonLd,
+} from '../../utils/structured-data';
+
+const POSTS_PER_PAGE = 12;
+const currentPath = Astro.url.pathname;
+const siteConfig = await getSiteConfig();
+
+// 記号を削除してカテゴリ名をクリーンアップ
+function sanitizeCategory(category: string): string {
+  // 記号を削除（英数字と日本語以外）
+  return category.replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g, '');
+}
+
+// 記事を取得（環境に応じてドラフトを表示）
+const sortedPosts = await getSortedBlogPosts();
+
+// 1ページ目の記事のみを取得
+const posts = sortedPosts.slice(0, POSTS_PER_PAGE);
+
+// ページネーション用の情報
+const totalPages = Math.ceil(sortedPosts.length / POSTS_PER_PAGE);
+const currentPage = 1;
+
+// カテゴリ一覧を取得
+const categories = [
+  ...new Set(sortedPosts.map(post => post.data.category).filter(Boolean)),
+];
+
+// Blog構造化データ生成
+const blogUrl = new URL('/blog/', Astro.site).href;
+const blogStructuredData = await generateBlogStructuredData(blogUrl);
+const structuredDataJson = toJsonLd(blogStructuredData);
+---
+
+<BaseLayout
+  title={await createPageTitle('記事一覧')}
+  structuredData={[structuredDataJson]}
+>
+  <div class="min-h-screen flex flex-col">
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
+
+    <main class="flex-1">
+      <!-- Header Section -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+        <h1
+          class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight"
+        >
+          すべての記事
+        </h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          {sortedPosts.length} 記事
+        </p>
+      </div>
+
+      <!-- Blog Posts -->
+      <section class="pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {
+            categories.length > 0 && (
+              <div class="mb-8">
+                <div class="flex flex-wrap gap-2">
+                  <a
+                    href="/blog/"
+                    class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-primary-500 text-white"
+                  >
+                    すべて
+                  </a>
+                  {categories.map(category => {
+                    const count = sortedPosts.filter(
+                      post => post.data.category === category
+                    ).length;
+                    return (
+                      <a
+                        href={`/categories/${sanitizeCategory(category as string)}/`}
+                        class="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-600 dark:hover:text-primary-400"
+                      >
+                        {category}
+                        <span class="ml-1.5 text-xs text-gray-400 dark:text-gray-500">
+                          {count}
+                        </span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            )
+          }
+
+          {
+            posts.length > 0 ? (
+              <>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {posts.map(post => (
+                    <BlogCard post={post} client:visible />
+                  ))}
+                </div>
+
+                {/* ページネーション */}
+                <div class="mt-12">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    baseUrl="/blog"
+                    client:load
+                  />
+                </div>
+              </>
+            ) : (
+              <div class="text-center py-12">
+                <svg
+                  class="mx-auto h-12 w-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+                  記事がありません
+                </h3>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  まだ記事が公開されていません。
+                </p>
+              </div>
+            )
+          }
+        </div>
+      </section>
+    </main>
+
+    <Footer siteConfig={siteConfig} />
+  </div>
+</BaseLayout>

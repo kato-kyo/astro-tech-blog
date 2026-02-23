@@ -1,0 +1,77 @@
+name: Deploy to Netlify (Development)
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+    inputs:
+      deploy_message:
+        description: 'Deploy message'
+        required: false
+        default: 'Manual deploy from develop branch'
+
+env:
+  NODE_VERSION: '20'
+  NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_DEV }}
+  NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run type checking
+        run: npm run astro check
+
+      - name: Build site
+        run: npm run build
+        env:
+          NODE_ENV: development
+          SITE_URL: ${{ vars.DEV_SITE_URL }}
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        run: |
+          netlify deploy \
+            --prod \
+            --dir=dist \
+            --message="${{ github.event.inputs.deploy_message || github.event.head_commit.message }}"
+        env:
+          NETLIFY_SITE_ID: ${{ env.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ env.NETLIFY_AUTH_TOKEN }}
+
+      - name: Comment deployment info
+        if: github.event_name == 'push'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployUrl = `${{ vars.DEV_SITE_URL }}`;
+            const message = `🚀 **Development deployment successful!**
+            
+            📦 **Branch:** \`develop\`
+            🔗 **URL:** ${deployUrl}
+            📝 **Commit:** ${context.sha.substring(0, 7)} - ${context.payload.head_commit.message}
+            ⏰ **Deployed at:** ${new Date().toLocaleString()}`;
+            
+            console.log('Deployment successful:', deployUrl);

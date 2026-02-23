@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/react/Header.tsx';
+import Footer from '../../components/react/Footer.tsx';
+import TagGrid from '../../components/react/TagGrid.tsx';
+import { createPageTitle, getSiteConfig } from '../../utils/site-config.ts';
+import { getBlogPosts } from '../../utils/content.ts';
+
+const siteConfig = await getSiteConfig();
+const currentPath = Astro.url.pathname;
+
+// 全記事を取得（環境に応じてドラフトを表示）
+const allPosts = await getBlogPosts();
+
+// タグの統計を計算
+const tagStats = allPosts.reduce(
+  (acc, post) => {
+    post.data.tags.forEach(tag => {
+      if (!acc[tag]) {
+        acc[tag] = {
+          count: 0,
+          posts: [],
+        };
+      }
+      acc[tag].count++;
+      acc[tag].posts.push(post);
+    });
+    return acc;
+  },
+  {} as Record<string, { count: number; posts: any[] }>
+);
+
+// タグを記事数順にソート
+const sortedTags = Object.entries(tagStats)
+  .sort(([, a], [, b]) => b.count - a.count)
+  .map(([tag, stats]) => ({ tag, count: stats.count }));
+---
+
+<BaseLayout title={await createPageTitle('タグ一覧')}>
+  <div class="min-h-screen flex flex-col">
+    <Header currentPath={currentPath} siteConfig={siteConfig} client:load />
+
+    <main class="flex-1">
+      <!-- Header Section -->
+      <section class="bg-gray-50 dark:bg-gray-800/50 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center">
+            <h1
+              class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4"
+            >
+              タグ一覧
+            </h1>
+            <p class="text-lg text-gray-600 dark:text-gray-300">
+              (全 {sortedTags.length} タグ）
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tags Grid with Search -->
+      <section class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TagGrid client:load initialTags={sortedTags} />
+        </div>
+      </section>
+    </main>
+
+    <Footer siteConfig={siteConfig} />
+  </div>
+</BaseLayout>

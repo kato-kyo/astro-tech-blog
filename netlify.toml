@@ -1,0 +1,58 @@
+[build]
+  # ビルドコマンド
+  command = "npm run build"
+  
+  # 本番用出力ディレクトリ
+  publish = "dist"
+  
+  # Node.jsバージョン
+  environment = { NODE_VERSION = "20" }
+
+[build.processing]
+  # 画像の最適化を無効化（Astroが処理するため）
+  skip_processing = false
+
+[build.processing.images]
+  compress = false
+
+# developブランチの設定（開発環境）
+[context.develop]
+  command = "npm run build"
+  publish = "dist"
+
+# プレビューデプロイの設定
+[context.deploy-preview]
+  command = "npm run build"
+  publish = "dist"
+
+# ブランチデプロイの設定
+[context.branch-deploy]
+  command = "npm run build"
+  publish = "dist"
+
+# リダイレクト設定
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404
+
+# ヘッダー設定
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 静的ファイルのキャッシュ設定
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# フォント設定
+[[headers]]
+  for = "/*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
