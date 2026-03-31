@@ -49,7 +49,7 @@ const currentPath = Astro.url.pathname;
 const siteConfig = await getSiteConfig();
 
 // 構造化データ生成
-const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
 const articleStructuredData = await generateArticleStructuredData(
   post,
   canonicalURL
@@ -57,8 +57,8 @@ const articleStructuredData = await generateArticleStructuredData(
 
 // パンくずナビ用の構造化データ
 const breadcrumbData = generateBreadcrumbStructuredData([
-  { name: 'ホーム', url: Astro.site!.href },
-  { name: 'ブログ', url: new URL('/blog/', Astro.site).href },
+  { name: 'ホーム', url: new URL('/', Astro.site ?? Astro.url).href },
+  { name: 'ブログ', url: new URL('/blog/', Astro.site ?? Astro.url).href },
   { name: title, url: canonicalURL },
 ]);
 
